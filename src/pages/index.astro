@@ -1,0 +1,19 @@
+---
+import BaseLayout from '@layouts/BaseLayout.astro';
+import HeroSection from '@components/home/HeroSection.astro';
+import BioSection from '@components/home/BioSection.astro';
+import PaperHighlights from '@components/home/PaperHighlights.astro';
+import LatestNews from '@components/home/LatestNews.astro';
+import QuoteSection from '@components/home/QuoteSection.astro';
+---
+
+<BaseLayout
+  title="Home"
+  description="Fabio Bacchini — Assistant Professor at KU Leuven and Research Scientist at BIRA-IASB. Specializing in astrophysical plasma simulations, particle-in-cell methods, and high-performance computing."
+>
+  <HeroSection />
+  <BioSection />
+  <PaperHighlights />
+  <LatestNews />
+  <QuoteSection />
+</BaseLayout>

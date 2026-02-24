@@ -1,0 +1,16 @@
+---
+interface Props {
+  year: number;
+  count: number;
+}
+
+const { year, count } = Astro.props;
+---
+
+<div data-year-divider={String(year)} class="flex items-center gap-4 py-2">
+  <span class="font-heading text-2xl font-bold text-text-primary md:text-3xl">{year}</span>
+  <div class="h-px flex-1 bg-gradient-to-r from-accent-cyan/30 to-transparent"></div>
+  <span class="rounded-full bg-bg-elevated px-3 py-1 text-xs text-text-muted">
+    {count} {count === 1 ? 'paper' : 'papers'}
+  </span>
+</div>

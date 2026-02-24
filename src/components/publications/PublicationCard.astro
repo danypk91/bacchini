@@ -1,0 +1,108 @@
+---
+import Badge from '@components/global/Badge.astro';
+import { highlightAuthor, doiUrl, arxivUrl } from '@utils/formatters';
+
+interface Props {
+  title: string;
+  authors: string;
+  year: number;
+  journal?: string;
+  status: 'submitted' | 'accepted' | 'published';
+  doi?: string | null;
+  arxiv?: string | null;
+  highlight?: boolean;
+  highlightLabel?: string | null;
+  fabioPosition?: 'first' | 'co-first' | 'contributing';
+}
+
+const { title, authors, year, journal, status, doi, arxiv, highlight = false, highlightLabel, fabioPosition = 'contributing' } = Astro.props;
+
+const statusStyles: Record<string, { variant: 'cyan' | 'violet' | 'orange' | 'default'; label: string }> = {
+  published: { variant: 'cyan', label: 'Published' },
+  accepted: { variant: 'violet', label: 'Accepted' },
+  submitted: { variant: 'default', label: 'Submitted' },
+};
+---
+
+<article
+  data-pub-card
+  data-year={String(year)}
+  data-status={status}
+  data-position={fabioPosition}
+  data-highlight={String(highlight)}
+  class:list={[
+    'rounded-xl border p-5 transition-all duration-200',
+    highlight
+      ? 'border-accent-violet/30 bg-bg-surface hover:border-accent-violet/50'
+      : 'border-bg-elevated bg-bg-surface/50 hover:bg-bg-surface',
+  ]}
+>
+  <!-- Badges row -->
+  <div class="mb-2 flex flex-wrap items-center gap-2">
+    <Badge variant={statusStyles[status].variant} size="sm">
+      {statusStyles[status].label}
+    </Badge>
+    {fabioPosition === 'first' && (
+      <Badge variant="cyan" size="sm">First Author</Badge>
+    )}
+    {fabioPosition === 'co-first' && (
+      <Badge variant="cyan" size="sm">Co-First Author</Badge>
+    )}
+    {highlight && highlightLabel && (
+      <Badge variant="orange" size="sm">
+        <svg class="mr-1 inline h-3 w-3" fill="currentColor" viewBox="0 0 20 20">
+          <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
+        </svg>
+        {highlightLabel}
+      </Badge>
+    )}
+  </div>
+
+  <!-- Title -->
+  <h3 class="font-heading text-base font-semibold leading-snug text-text-primary">
+    {title}
+  </h3>
+
+  <!-- Authors -->
+  <p
+    class="mt-1.5 text-sm text-text-muted leading-relaxed"
+    set:html={highlightAuthor(authors)}
+  />
+
+  <!-- Journal -->
+  {journal && (
+    <p class="mt-1 text-sm text-text-secondary">
+      <span class="italic">{journal}</span>
+    </p>
+  )}
+
+  <!-- Links -->
+  <div class="mt-3 flex items-center gap-4">
+    {arxiv && (
+      <a
+        href={arxivUrl(arxiv)}
+        target="_blank"
+        rel="noopener noreferrer"
+        class="inline-flex items-center gap-1.5 text-xs text-text-muted transition-colors hover:text-accent-cyan"
+      >
+        <svg class="h-3.5 w-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M19.5 14.25v-2.625a3.375 3.375 0 00-3.375-3.375h-1.5A1.125 1.125 0 0113.5 7.125v-1.5a3.375 3.375 0 00-3.375-3.375H8.25m.75 12l3 3m0 0l3-3m-3 3v-6m-1.5-9H5.625c-.621 0-1.125.504-1.125 1.125v17.25c0 .621.504 1.125 1.125 1.125h12.75c.621 0 1.125-.504 1.125-1.125V11.25a9 9 0 00-9-9z" />
+        </svg>
+        arXiv
+      </a>
+    )}
+    {doi && (
+      <a
+        href={doiUrl(doi)}
+        target="_blank"
+        rel="noopener noreferrer"
+        class="inline-flex items-center gap-1.5 text-xs text-text-muted transition-colors hover:text-accent-cyan"
+      >
+        <svg class="h-3.5 w-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M13.19 8.688a4.5 4.5 0 011.242 7.244l-4.5 4.5a4.5 4.5 0 01-6.364-6.364l1.757-1.757m9.86-1.535a4.5 4.5 0 00-1.242-7.244l-4.5-4.5a4.5 4.5 0 00-6.364 6.364L4.34 8.303" />
+        </svg>
+        DOI
+      </a>
+    )}
+  </div>
+</article>

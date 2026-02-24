@@ -1,0 +1,85 @@
+---
+const currentYear = new Date().getFullYear();
+
+const navLinks = [
+  { href: '/', label: 'Home' },
+  { href: '/research/', label: 'Research' },
+  { href: '/publications/', label: 'Publications' },
+  { href: '/contact/', label: 'Contact' },
+];
+---
+
+<footer class="border-t border-bg-elevated bg-bg-surface">
+  <div class="mx-auto max-w-[1200px] px-6 py-16">
+    <div class="grid grid-cols-1 gap-12 md:grid-cols-3">
+      <!-- Branding -->
+      <div>
+        <a
+          href="/"
+          class="font-heading text-lg font-bold text-text-primary transition-colors hover:text-accent-cyan"
+        >
+          Fabio Bacchini
+        </a>
+        <p class="mt-2 text-sm text-text-secondary">
+          Assistant Professor & Research Scientist
+        </p>
+        <div class="mt-4 flex items-center gap-4">
+          <span class="text-xs text-text-muted">KU Leuven</span>
+          <span class="text-xs text-text-muted">&middot;</span>
+          <span class="text-xs text-text-muted">BIRA-IASB</span>
+        </div>
+      </div>
+
+      <!-- Navigation -->
+      <div>
+        <h3 class="font-heading text-sm font-medium uppercase tracking-wider text-text-muted">
+          Navigation
+        </h3>
+        <ul class="mt-4 flex flex-col gap-2">
+          {navLinks.map((link) => (
+            <li>
+              <a
+                href={link.href}
+                class="text-sm text-text-secondary transition-colors hover:text-accent-cyan"
+              >
+                {link.label}
+              </a>
+            </li>
+          ))}
+        </ul>
+      </div>
+
+      <!-- Contact -->
+      <div>
+        <h3 class="font-heading text-sm font-medium uppercase tracking-wider text-text-muted">
+          Contact
+        </h3>
+        <ul class="mt-4 flex flex-col gap-2">
+          <li>
+            <a
+              href="mailto:fabio.bacchini@kuleuven.be"
+              class="text-sm text-text-secondary transition-colors hover:text-accent-cyan"
+            >
+              fabio.bacchini@kuleuven.be
+            </a>
+          </li>
+          <li>
+            <a
+              href="mailto:fabio.bacchini@aeronomie.be"
+              class="text-sm text-text-secondary transition-colors hover:text-accent-cyan"
+            >
+              fabio.bacchini@aeronomie.be
+            </a>
+          </li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- Divider + Copyright -->
+    <div class="mt-12 border-t border-bg-elevated pt-8">
+      <p class="text-center text-xs text-text-muted">
+        &copy; {currentYear} Fabio Bacchini. All rights reserved.
+      </p>
+    </div>
+  </div>
+</footer>

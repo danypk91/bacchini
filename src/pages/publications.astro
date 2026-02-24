@@ -1,0 +1,50 @@
+---
+import BaseLayout from '@layouts/BaseLayout.astro';
+import { getCollection } from 'astro:content';
+import PublicationList from '@components/publications/PublicationList.astro';
+import PublicationFilter from '@components/interactive/PublicationFilter';
+import PageHero from '@components/global/PageHero.astro';
+
+const allPubs = await getCollection('publications');
+const totalCount = allPubs.length;
+const years = [...new Set(allPubs.map((p) => p.data.year))].sort((a, b) => b - a);
+---
+
+<BaseLayout
+  title="Publications"
+  description="Complete list of publications by Fabio Bacchini — peer-reviewed papers in astrophysics, plasma physics, and computational methods."
+>
+  <PageHero
+    title="Publications"
+    subtitle={`Complete list of peer-reviewed publications — ${totalCount} papers.`}
+    accentColor="violet"
+  >
+    <svg class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+      <path stroke-linecap="round" stroke-linejoin="round" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" />
+    </svg>
+    <span class="text-xs font-medium tracking-wider uppercase">Paper Archive</span>
+  </PageHero>
+
+  <!-- Publication Filter + List -->
+  <section class="py-16 md:py-24">
+    <div class="mx-auto max-w-[1200px] px-6">
+      <PublicationFilter client:load years={years} totalCount={totalCount} />
+      <div class="mt-8">
+        <PublicationList />
+      </div>
+    </div>
+  </section>
+
+  <!-- Back to top -->
+  <div class="pb-16 text-center">
+    <a
+      href="#"
+      class="inline-flex items-center gap-2 text-sm text-text-muted transition-colors hover:text-accent-cyan"
+    >
+      <svg class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+        <path stroke-linecap="round" stroke-linejoin="round" d="M5 10l7-7m0 0l7 7m-7-7v18" />
+      </svg>
+      Back to top
+    </a>
+  </div>
+</BaseLayout>

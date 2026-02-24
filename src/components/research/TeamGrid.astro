@@ -1,0 +1,73 @@
+---
+import { getCollection } from 'astro:content';
+import SectionHeading from '@components/global/SectionHeading.astro';
+import TeamCard from './TeamCard.astro';
+
+const allTeam = await getCollection('team');
+const currentMembers = allTeam
+  .filter(m => m.data.status === 'current')
+  .sort((a, b) => a.data.order - b.data.order);
+
+const postdocs = currentMembers.filter(m => m.data.role.toLowerCase().includes('postdoc'));
+const phdStudents = currentMembers.filter(m => m.data.role.toLowerCase().includes('phd') && !m.data.role.toLowerCase().includes('co-supervision'));
+const coSupervised = currentMembers.filter(m => m.data.role.toLowerCase().includes('co-supervision'));
+---
+
+<section class="py-16 md:py-24">
+  <div class="mx-auto max-w-[1200px] px-6">
+    <SectionHeading title="Research Group" subtitle="Current team members" />
+
+    <!-- Postdoctoral Fellows -->
+    <div class="mb-12">
+      <h3 class="mb-6 text-sm font-semibold uppercase tracking-wider text-text-muted">
+        Postdoctoral Fellows
+      </h3>
+      <div class="grid grid-cols-2 gap-8 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5">
+        {postdocs.map((member) => (
+          <TeamCard
+            name={member.data.name}
+            title={member.data.title}
+            role={member.data.role}
+            photo={member.data.photo}
+          />
+        ))}
+      </div>
+    </div>
+
+    <!-- PhD Students -->
+    <div class="mb-12">
+      <h3 class="mb-6 text-sm font-semibold uppercase tracking-wider text-text-muted">
+        PhD Students
+      </h3>
+      <div class="grid grid-cols-2 gap-8 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5">
+        {phdStudents.map((member) => (
+          <TeamCard
+            name={member.data.name}
+            title={member.data.title}
+            role={member.data.role}
+            photo={member.data.photo}
+          />
+        ))}
+      </div>
+    </div>
+
+    <!-- Co-supervised -->
+    {coSupervised.length > 0 && (
+      <div>
+        <h3 class="mb-6 text-sm font-semibold uppercase tracking-wider text-text-muted">
+          Co-supervised
+        </h3>
+        <div class="grid grid-cols-2 gap-8 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5">
+          {coSupervised.map((member) => (
+            <TeamCard
+              name={member.data.name}
+              title={member.data.title}
+              role={member.data.role}
+              photo={member.data.photo}
+            />
+          ))}
+        </div>
+      </div>
+    )}
+  </div>
+</section>

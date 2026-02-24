@@ -1,0 +1,162 @@
+---
+import SectionHeading from '@components/global/SectionHeading.astro';
+import Badge from '@components/global/Badge.astro';
+import { highlightAuthor, doiUrl, arxivUrl } from '@utils/formatters';
+
+interface Paper {
+  title: string;
+  authors: string;
+  year: number;
+  journal: string;
+  status: 'submitted' | 'accepted' | 'published';
+  doi?: string;
+  arxiv?: string;
+  highlight?: boolean;
+  highlightLabel?: string;
+}
+
+const papers: Paper[] = [
+  {
+    title: 'Three-dimensional Dynamics of Strongly Magnetized Ion–Electron Relativistic Reconnection',
+    authors: 'Bacchini, F., Werner, G.R., Granier, C., Vos, J.',
+    year: 2025,
+    journal: 'The Astrophysical Journal Letters',
+    status: 'published',
+    doi: '10.3847/2041-8213/ae0197',
+    arxiv: '2507.12509',
+  },
+  {
+    title: 'Collisionless Magnetorotational Turbulence in Pair Plasmas: Steady-state Dynamics, Particle Acceleration, and Radiative Cooling',
+    authors: 'Bacchini, F., Zhdankin, V., Gorbunov, E.A., Werner, G.R., Arzamasskiy, L., Begelman, M.C., Uzdensky, D.A.',
+    year: 2024,
+    journal: 'Physical Review Letters',
+    status: 'published',
+    doi: '10.1103/PhysRevLett.133.045202',
+    arxiv: '2401.01399',
+    highlight: true,
+    highlightLabel: "PRL Editor's Suggestion",
+  },
+  {
+    title: 'Leaking Outside the Box: Kinetic Turbulence with Cosmic-Ray Escape',
+    authors: 'Gorbunov, E.A., Grošelj, D., Bacchini, F.',
+    year: 2025,
+    journal: 'Physical Review Letters',
+    status: 'published',
+    doi: '10.1103/3777-z37m',
+    arxiv: '2503.03820',
+    highlight: true,
+    highlightLabel: "PRL Editor's Suggestion",
+  },
+  {
+    title: 'Magnetic reconnection and hot spot formation in black hole accretion disks',
+    authors: 'Ripperda, B., Bacchini, F., Philippov, A.A.',
+    year: 2020,
+    journal: 'The Astrophysical Journal',
+    status: 'published',
+    doi: '10.3847/1538-4357/ababab',
+    arxiv: '2003.04330',
+    highlight: true,
+    highlightLabel: 'Top Cited Paper Award 2023 (IOP/AAS)',
+  },
+];
+
+const statusStyles: Record<string, { variant: 'cyan' | 'violet' | 'orange' | 'default'; label: string }> = {
+  published: { variant: 'cyan', label: 'Published' },
+  accepted: { variant: 'violet', label: 'Accepted' },
+  submitted: { variant: 'default', label: 'Submitted' },
+};
+---
+
+<section class="bg-bg-surface/50 py-16 md:py-24">
+  <div class="mx-auto max-w-[1200px] px-6">
+    <SectionHeading title="Paper Highlights" subtitle="Selected recent publications" />
+
+    <div class="grid grid-cols-1 gap-6 md:grid-cols-2">
+      {papers.map((paper) => (
+        <article
+          class:list={[
+            'group relative flex flex-col rounded-2xl border bg-bg-surface p-6 transition-all duration-300 hover:-translate-y-1',
+            paper.highlight
+              ? 'border-accent-violet/30 hover:border-accent-violet/60 hover:shadow-lg hover:shadow-accent-violet/5'
+              : 'border-bg-elevated hover:border-accent-cyan/30 hover:shadow-lg hover:shadow-accent-cyan/5',
+          ]}
+        >
+          <!-- Top badges row -->
+          <div class="mb-3 flex flex-wrap items-center gap-2">
+            <Badge variant="cyan">{paper.year}</Badge>
+            <Badge variant={statusStyles[paper.status].variant}>
+              {statusStyles[paper.status].label}
+            </Badge>
+            {paper.highlight && paper.highlightLabel && (
+              <Badge variant="orange" size="md">
+                <svg class="mr-1 h-3 w-3" fill="currentColor" viewBox="0 0 20 20">
+                  <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
+                </svg>
+                {paper.highlightLabel}
+              </Badge>
+            )}
+          </div>
+
+          <!-- Title -->
+          <h3 class="line-clamp-2 font-heading text-lg font-semibold leading-snug text-text-primary group-hover:text-accent-cyan transition-colors duration-200">
+            {paper.title}
+          </h3>
+
+          <!-- Authors -->
+          <p
+            class="mt-2 line-clamp-1 text-sm text-text-muted"
+            set:html={highlightAuthor(paper.authors)}
+          />
+
+          <!-- Journal -->
+          <p class="mt-1 text-sm text-text-secondary">
+            <span class="italic">{paper.journal}</span>
+          </p>
+
+          <!-- Links -->
+          <div class="mt-auto flex items-center gap-4 pt-4">
+            {paper.arxiv && (
+              <a
+                href={arxivUrl(paper.arxiv)}
+                target="_blank"
+                rel="noopener noreferrer"
+                class="inline-flex items-center gap-1.5 text-sm text-text-muted transition-colors hover:text-accent-cyan"
+              >
+                <svg class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M19.5 14.25v-2.625a3.375 3.375 0 00-3.375-3.375h-1.5A1.125 1.125 0 0113.5 7.125v-1.5a3.375 3.375 0 00-3.375-3.375H8.25m.75 12l3 3m0 0l3-3m-3 3v-6m-1.5-9H5.625c-.621 0-1.125.504-1.125 1.125v17.25c0 .621.504 1.125 1.125 1.125h12.75c.621 0 1.125-.504 1.125-1.125V11.25a9 9 0 00-9-9z" />
+                </svg>
+                arXiv
+              </a>
+            )}
+            {paper.doi && (
+              <a
+                href={doiUrl(paper.doi)}
+                target="_blank"
+                rel="noopener noreferrer"
+                class="inline-flex items-center gap-1.5 text-sm text-text-muted transition-colors hover:text-accent-cyan"
+              >
+                <svg class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M13.19 8.688a4.5 4.5 0 011.242 7.244l-4.5 4.5a4.5 4.5 0 01-6.364-6.364l1.757-1.757m9.86-1.535a4.5 4.5 0 00-1.242-7.244l-4.5-4.5a4.5 4.5 0 00-6.364 6.364L4.34 8.303" />
+                </svg>
+                DOI
+              </a>
+            )}
+          </div>
+        </article>
+      ))}
+    </div>
+
+    <!-- View all link -->
+    <div class="mt-10 text-center">
+      <a
+        href="/publications/"
+        class="inline-flex items-center gap-2 text-sm font-medium text-accent-cyan transition-colors hover:text-accent-cyan/80"
+      >
+        View all publications
+        <svg class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M13 7l5 5m0 0l-5 5m5-5H6" />
+        </svg>
+      </a>
+    </div>
+  </div>
+</section>

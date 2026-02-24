@@ -1,0 +1,47 @@
+---
+import SectionHeading from '@components/global/SectionHeading.astro';
+import Button from '@components/global/Button.astro';
+---
+
+<section class="py-16 md:py-24">
+  <div class="mx-auto max-w-[1200px] px-6">
+    <SectionHeading title="About Me" />
+
+    <div class="max-w-3xl">
+      <p class="text-lg text-text-secondary leading-relaxed">
+        Since 2022, I am a BELSPO FED-tWIN Assistant Professor (Tenure-track) and Research Scientist at the
+        <a href="https://wis.kuleuven.be/CmPA" target="_blank" rel="noopener noreferrer" class="text-accent-cyan hover:underline">Centre for mathematical Plasma Astrophysics (CmPA)</a>
+        of KU Leuven and the
+        <a href="https://www.aeronomie.be" target="_blank" rel="noopener noreferrer" class="text-accent-cyan hover:underline">Royal Belgian Institute for Space Aeronomy (BIRA-IASB)</a>.
+      </p>
+      <p class="mt-4 text-text-secondary leading-relaxed">
+        My work focuses on the development, implementation, and application of
+        numerical methods for astrophysical plasma simulations, with emphasis on
+        particle-in-cell methods and high-performance computing. I investigate
+        fundamental plasma processes — such as magnetic reconnection, turbulence,
+        and particle acceleration — in environments ranging from the solar wind
+        to black hole magnetospheres.
+      </p>
+      <p class="mt-4 text-text-secondary leading-relaxed">
+        I obtained my PhD in Mathematics from KU Leuven in 2018, under the supervision
+        of Giovanni Lapenta. I then held postdoctoral positions at Goethe Universit&auml;t
+        Frankfurt am Main (2019), KU Leuven as FWO Postdoctoral Fellow (2019&ndash;2020),
+        and the University of Colorado Boulder as CIPS Postdoctoral Fellow (2020&ndash;2022),
+        before returning to KU Leuven as faculty.
+      </p>
+
+      <div class="mt-8 flex flex-wrap gap-3">
+        <Button href="/cv-bacchini.pdf" variant="primary" size="md" external>
+          <svg class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" /></svg>
+          Download CV
+        </Button>
+        <Button href="https://scholar.google.com/citations?user=lVDg704AAAAJ" variant="ghost" size="md" external>
+          Google Scholar
+        </Button>
+        <Button href="https://orcid.org/0000-0002-7526-8154" variant="ghost" size="md" external>
+          ORCID
+        </Button>
+      </div>
+    </div>
+  </div>
+</section>

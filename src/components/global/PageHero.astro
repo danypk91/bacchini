@@ -1,0 +1,260 @@
+---
+interface Props {
+  title: string;
+  subtitle?: string;
+  accentColor?: 'cyan' | 'violet' | 'orange' | 'pink';
+}
+
+const { title, subtitle, accentColor = 'cyan' } = Astro.props;
+
+const hasSlot = Astro.slots.has('default');
+
+const orbColors = {
+  cyan: { primary: 'rgba(0,212,255,0.18)', secondary: 'rgba(124,58,237,0.12)', tertiary: 'rgba(0,212,255,0.08)' },
+  violet: { primary: 'rgba(124,58,237,0.18)', secondary: 'rgba(0,212,255,0.12)', tertiary: 'rgba(124,58,237,0.08)' },
+  orange: { primary: 'rgba(255,107,53,0.18)', secondary: 'rgba(236,72,153,0.12)', tertiary: 'rgba(255,107,53,0.08)' },
+  pink: { primary: 'rgba(236,72,153,0.18)', secondary: 'rgba(124,58,237,0.12)', tertiary: 'rgba(236,72,153,0.08)' },
+};
+
+const colors = orbColors[accentColor];
+
+const badgeColorMap = {
+  cyan: 'border-accent-cyan/20 bg-accent-cyan/5 text-accent-cyan',
+  violet: 'border-accent-violet/20 bg-accent-violet/5 text-accent-violet',
+  orange: 'border-accent-orange/20 bg-accent-orange/5 text-accent-orange',
+  pink: 'border-accent-pink/20 bg-accent-pink/5 text-accent-pink',
+};
+
+const accentVarMap = {
+  cyan: '--color-accent-cyan',
+  violet: '--color-accent-violet',
+  orange: '--color-accent-orange',
+  pink: '--color-accent-pink',
+};
+
+const ringColorMap = {
+  cyan: 'border-accent-cyan/[0.06]',
+  violet: 'border-accent-violet/[0.06]',
+  orange: 'border-accent-orange/[0.06]',
+  pink: 'border-accent-pink/[0.06]',
+};
+---
+
+<section class="page-hero relative overflow-hidden pt-40 pb-24 md:pt-48 md:pb-28" style={`--hero-accent: var(${accentVarMap[accentColor]});`}>
+  <!-- Background gradient -->
+  <div
+    class="absolute inset-0"
+    style="background: linear-gradient(135deg, #0a0a0f 0%, #1a1a2e 50%, #16213e 100%);"
+  ></div>
+
+  <!-- Dot grid pattern -->
+  <div class="absolute inset-0 opacity-[0.035]" style={`
+    background-image: radial-gradient(circle, currentColor 1px, transparent 1px);
+    background-size: 32px 32px;
+  `}></div>
+
+  <!-- Animated glow orbs -->
+  <div
+    class="hero-orb-1 absolute -right-20 -top-20 h-[550px] w-[550px] rounded-full blur-3xl"
+    style={`background: radial-gradient(circle, ${colors.primary} 0%, transparent 70%);`}
+  ></div>
+  <div
+    class="hero-orb-2 absolute -bottom-32 -left-20 h-[400px] w-[400px] rounded-full blur-3xl"
+    style={`background: radial-gradient(circle, ${colors.secondary} 0%, transparent 70%);`}
+  ></div>
+  <div
+    class="hero-orb-3 absolute left-1/2 top-1/2 h-[300px] w-[300px] -translate-x-1/2 -translate-y-1/2 rounded-full blur-3xl"
+    style={`background: radial-gradient(circle, ${colors.tertiary} 0%, transparent 70%);`}
+  ></div>
+
+  <!-- Floating geometric elements -->
+  <div class="absolute inset-0 overflow-hidden" aria-hidden="true">
+    <!-- Ring 1 -->
+    <div class={`hero-float-1 absolute right-[15%] top-[20%] h-20 w-20 rounded-full border ${ringColorMap[accentColor]}`}></div>
+    <!-- Ring 2 -->
+    <div class={`hero-float-2 absolute left-[10%] bottom-[25%] h-32 w-32 rounded-full border ${ringColorMap[accentColor]}`}></div>
+    <!-- Ring 3 (small) -->
+    <div class={`hero-float-3 absolute right-[30%] bottom-[15%] h-10 w-10 rounded-full border ${ringColorMap[accentColor]}`}></div>
+    <!-- Dot cluster -->
+    <div class="hero-float-2 absolute right-[20%] top-[55%] flex gap-2 opacity-[0.08]">
+      <span class="block h-1.5 w-1.5 rounded-full bg-[var(--hero-accent)]"></span>
+      <span class="block h-1.5 w-1.5 rounded-full bg-[var(--hero-accent)]"></span>
+      <span class="block h-1.5 w-1.5 rounded-full bg-[var(--hero-accent)]"></span>
+    </div>
+    <!-- Cross -->
+    <div class="hero-float-1 absolute left-[22%] top-[30%] opacity-[0.06]">
+      <div class="h-6 w-px bg-[var(--hero-accent)]"></div>
+      <div class="absolute left-1/2 top-1/2 h-px w-6 -translate-x-1/2 -translate-y-1/2 bg-[var(--hero-accent)]"></div>
+    </div>
+    <!-- Diagonal line -->
+    <div class="hero-float-3 absolute right-[8%] top-[40%] h-16 w-px origin-center rotate-45 bg-[var(--hero-accent)] opacity-[0.05]"></div>
+  </div>
+
+  <!-- Large watermark title -->
+  <div class="absolute inset-0 flex items-center justify-end overflow-hidden pointer-events-none select-none" aria-hidden="true">
+    <span class="hero-watermark font-heading text-[12rem] font-bold leading-none text-white opacity-[0.02] -mr-8 md:text-[16rem] lg:text-[20rem]">
+      {title}
+    </span>
+  </div>
+
+  <!-- Content -->
+  <div class="relative z-10 mx-auto max-w-[1200px] px-6">
+    <!-- Optional slot content (badge/icon) -->
+    {hasSlot && (
+      <div class={`hero-stagger-1 mb-5 inline-flex items-center gap-2 rounded-full border px-4 py-1.5 ${badgeColorMap[accentColor]}`}>
+        <slot />
+      </div>
+    )}
+
+    <h1 class="hero-stagger-2 font-heading text-4xl font-bold text-text-primary md:text-5xl lg:text-6xl">
+      {title}
+    </h1>
+
+    {subtitle && (
+      <p class="hero-stagger-3 mt-4 max-w-2xl text-lg text-text-secondary md:text-xl">
+        {subtitle}
+      </p>
+    )}
+
+    <!-- Animated decorative line -->
+    <div class="hero-line mt-8 h-px overflow-hidden">
+      <div class="hero-line-inner h-full w-24" style={`background: linear-gradient(90deg, var(--hero-accent), transparent);`}></div>
+    </div>
+  </div>
+
+  <!-- Bottom gradient border -->
+  <div class="absolute bottom-0 left-0 right-0 h-px">
+    <div class="hero-border-glow mx-auto h-full max-w-[800px]" style={`background: linear-gradient(90deg, transparent, var(--hero-accent), transparent); opacity: 0.3;`}></div>
+  </div>
+</section>
+
+<style>
+  /* === Staggered fade-in === */
+  .hero-stagger-1,
+  .hero-stagger-2,
+  .hero-stagger-3 {
+    animation: heroFadeUp 0.7s ease-out both;
+  }
+  .hero-stagger-1 { animation-delay: 0.1s; }
+  .hero-stagger-2 { animation-delay: 0.2s; }
+  .hero-stagger-3 { animation-delay: 0.35s; }
+
+  @keyframes heroFadeUp {
+    from {
+      opacity: 0;
+      transform: translateY(16px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  /* === Animated line === */
+  .hero-line-inner {
+    animation: lineExpand 0.8s ease-out 0.5s both;
+  }
+
+  @keyframes lineExpand {
+    from {
+      transform: scaleX(0);
+      transform-origin: left;
+    }
+    to {
+      transform: scaleX(1);
+      transform-origin: left;
+    }
+  }
+
+  /* === Orb animations === */
+  .hero-orb-1 {
+    animation: orbDrift1 8s ease-in-out infinite alternate;
+  }
+  .hero-orb-2 {
+    animation: orbDrift2 10s ease-in-out infinite alternate;
+  }
+  .hero-orb-3 {
+    animation: orbPulse 6s ease-in-out infinite alternate;
+  }
+
+  @keyframes orbDrift1 {
+    from { transform: translate(0, 0) scale(1); }
+    to   { transform: translate(-30px, 20px) scale(1.08); }
+  }
+  @keyframes orbDrift2 {
+    from { transform: translate(0, 0) scale(1); }
+    to   { transform: translate(25px, -15px) scale(1.05); }
+  }
+  @keyframes orbPulse {
+    from { transform: translate(-50%, -50%) scale(0.9); opacity: 0.6; }
+    to   { transform: translate(-50%, -50%) scale(1.15); opacity: 1; }
+  }
+
+  /* === Floating geometric elements === */
+  .hero-float-1 {
+    animation: float1 12s ease-in-out infinite alternate;
+  }
+  .hero-float-2 {
+    animation: float2 15s ease-in-out infinite alternate;
+  }
+  .hero-float-3 {
+    animation: float3 10s ease-in-out infinite alternate;
+  }
+
+  @keyframes float1 {
+    from { transform: translate(0, 0) rotate(0deg); }
+    to   { transform: translate(-12px, 10px) rotate(15deg); }
+  }
+  @keyframes float2 {
+    from { transform: translate(0, 0) rotate(0deg); }
+    to   { transform: translate(10px, -14px) rotate(-10deg); }
+  }
+  @keyframes float3 {
+    from { transform: translate(0, 0) rotate(0deg); }
+    to   { transform: translate(-8px, -10px) rotate(20deg); }
+  }
+
+  /* === Bottom border glow pulse === */
+  .hero-border-glow {
+    animation: borderPulse 4s ease-in-out infinite alternate;
+  }
+
+  @keyframes borderPulse {
+    from { opacity: 0.15; }
+    to   { opacity: 0.4; }
+  }
+
+  /* === Watermark === */
+  .hero-watermark {
+    animation: watermarkFade 1.2s ease-out 0.3s both;
+  }
+
+  @keyframes watermarkFade {
+    from { opacity: 0; transform: translateX(40px); }
+    to   { opacity: 0.02; transform: translateX(0); }
+  }
+
+  /* === Reduced motion === */
+  @media (prefers-reduced-motion: reduce) {
+    .hero-stagger-1,
+    .hero-stagger-2,
+    .hero-stagger-3,
+    .hero-line-inner,
+    .hero-orb-1,
+    .hero-orb-2,
+    .hero-orb-3,
+    .hero-float-1,
+    .hero-float-2,
+    .hero-float-3,
+    .hero-border-glow,
+    .hero-watermark {
+      animation: none;
+    }
+    .hero-line-inner {
+      transform: scaleX(1);
+    }
+    .hero-watermark {
+      opacity: 0.02;
+    }
+  }
+</style>

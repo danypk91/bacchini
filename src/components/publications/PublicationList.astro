@@ -1,0 +1,49 @@
+---
+import { getCollection } from 'astro:content';
+import PublicationCard from './PublicationCard.astro';
+import YearDivider from './YearDivider.astro';
+
+const allPubs = await getCollection('publications');
+
+// Sort by year (desc), then by fabio_position priority
+const sorted = allPubs.sort((a, b) => {
+  if (b.data.year !== a.data.year) return b.data.year - a.data.year;
+  const posOrder = { first: 0, 'co-first': 1, contributing: 2 };
+  return (posOrder[a.data.fabio_position] ?? 2) - (posOrder[b.data.fabio_position] ?? 2);
+});
+
+// Group by year
+const byYear = sorted.reduce<Record<number, typeof sorted>>((acc, pub) => {
+  const year = pub.data.year;
+  if (!acc[year]) acc[year] = [];
+  acc[year].push(pub);
+  return acc;
+}, {});
+
+const years = Object.keys(byYear).map(Number).sort((a, b) => b - a);
+const totalCount = allPubs.length;
+---
+
+<div>
+  {years.map((year) => (
+    <div class="mb-10">
+      <YearDivider year={year} count={byYear[year].length} />
+      <div class="mt-4 space-y-3">
+        {byYear[year].map((pub) => (
+          <PublicationCard
+            title={pub.data.title}
+            authors={pub.data.authors}
+            year={pub.data.year}
+            journal={pub.data.journal}
+            status={pub.data.status}
+            doi={pub.data.doi}
+            arxiv={pub.data.arxiv}
+            highlight={pub.data.highlight}
+            highlightLabel={pub.data.highlight_label}
+            fabioPosition={pub.data.fabio_position}
+          />
+        ))}
+      </div>
+    </div>
+  ))}
+</div>

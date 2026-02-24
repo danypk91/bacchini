@@ -1,0 +1,60 @@
+---
+import SectionHeading from '@components/global/SectionHeading.astro';
+
+const stats = [
+  { value: '46', label: 'Publications', color: 'text-accent-cyan' },
+  { value: '16', label: 'Team Members', color: 'text-accent-violet' },
+  { value: '5', label: 'PRL Papers', color: 'text-accent-orange' },
+];
+---
+
+<section id="about" class="py-16 md:py-24">
+  <div class="mx-auto max-w-[1200px] px-6">
+    <SectionHeading title="About" />
+
+    <div class="grid grid-cols-1 gap-12 md:grid-cols-5">
+      <!-- Text column (3/5) -->
+      <div class="md:col-span-3">
+        <p class="text-text-secondary leading-relaxed">
+          Since 2022, I am an Assistant Professor at the
+          <a
+            href="https://wis.kuleuven.be/CmPA"
+            target="_blank"
+            rel="noopener noreferrer"
+            class="text-accent-cyan hover:underline"
+          >
+            Centre for mathematical Plasma Astrophysics (CmPA)
+          </a>
+          of KU Leuven, Belgium. I am also a visiting researcher at the
+          <a
+            href="https://www.aeronomie.be"
+            target="_blank"
+            rel="noopener noreferrer"
+            class="text-accent-cyan hover:underline"
+          >
+            Royal Belgian Institute for Space Aeronomy (BIRA-IASB)
+          </a>.
+        </p>
+        <p class="mt-4 text-text-secondary leading-relaxed">
+          My work focuses on the development, implementation, and application of
+          numerical methods for astrophysical plasma simulations, with emphasis on
+          particle-in-cell methods and high-performance computing.
+        </p>
+      </div>
+
+      <!-- Stats column (2/5) -->
+      <div class="md:col-span-2">
+        <div class="grid grid-cols-3 gap-4 md:grid-cols-1 md:gap-6">
+          {stats.map((stat) => (
+            <div class="rounded-xl border border-bg-elevated bg-bg-surface p-5 text-center md:text-left">
+              <div class:list={['font-heading text-3xl font-bold md:text-4xl', stat.color]}>
+                {stat.value}
+              </div>
+              <div class="mt-1 text-sm text-text-muted">{stat.label}</div>
+            </div>
+          ))}
+        </div>
+      </div>
+    </div>
+  </div>
+</section>

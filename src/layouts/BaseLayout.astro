@@ -1,0 +1,42 @@
+---
+import { ViewTransitions } from 'astro:transitions';
+import SEOHead from '@components/global/SEOHead.astro';
+import Header from '@components/global/Header.astro';
+import Footer from '@components/global/Footer.astro';
+import ScrollAnimations from '@components/global/ScrollAnimations.astro';
+import '../styles/global.css';
+
+interface Props {
+  title: string;
+  description: string;
+  ogImage?: string;
+}
+
+const { title, description, ogImage } = Astro.props;
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <SEOHead title={title} description={description} ogImage={ogImage} />
+    <ViewTransitions />
+  </head>
+  <body class="min-h-screen bg-bg-deep text-text-primary">
+    <!-- Skip to content -->
+    <a
+      href="#main-content"
+      class="fixed left-4 top-4 z-[100] -translate-y-full rounded-lg bg-accent-cyan px-4 py-2 text-sm font-semibold text-bg-deep transition-transform focus:translate-y-0"
+    >
+      Skip to content
+    </a>
+
+    <Header transition:persist />
+
+    <main id="main-content" transition:animate="fade">
+      <slot />
+    </main>
+
+    <Footer />
+    <ScrollAnimations />
+  </body>
+</html>

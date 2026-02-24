@@ -1,0 +1,38 @@
+---
+interface Props {
+  quote?: string;
+  author?: string;
+}
+
+const {
+  quote = 'The most beautiful experience we can have is the mysterious. It is the fundamental emotion that stands at the cradle of true art and true science.',
+  author = 'Albert Einstein',
+} = Astro.props;
+---
+
+<section class="relative overflow-hidden bg-bg-elevated py-20 md:py-28">
+  <!-- Decorative large quote mark -->
+  <div
+    class="pointer-events-none absolute left-1/2 top-6 -translate-x-1/2 select-none font-heading text-[10rem] leading-none text-accent-cyan/[0.04] md:text-[14rem]"
+    aria-hidden="true"
+  >
+    &ldquo;
+  </div>
+
+  <!-- Subtle gradient accent -->
+  <div
+    class="absolute bottom-0 left-1/2 h-px w-2/3 -translate-x-1/2"
+    style="background: linear-gradient(90deg, transparent, rgba(0,212,255,0.2), transparent);"
+  ></div>
+
+  <div class="relative mx-auto max-w-[800px] px-6 text-center">
+    <blockquote>
+      <p class="text-xl italic leading-relaxed text-text-secondary md:text-2xl lg:text-[1.75rem]">
+        &ldquo;{quote}&rdquo;
+      </p>
+      <footer class="mt-6 text-sm font-medium text-text-muted">
+        &mdash; {author}
+      </footer>
+    </blockquote>
+  </div>
+</section>

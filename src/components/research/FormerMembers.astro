@@ -1,0 +1,36 @@
+---
+import { getCollection } from 'astro:content';
+import SectionHeading from '@components/global/SectionHeading.astro';
+
+const allTeam = await getCollection('team');
+const formerMembers = allTeam
+  .filter(m => m.data.status === 'former')
+  .sort((a, b) => a.data.order - b.data.order);
+---
+
+{formerMembers.length > 0 && (
+  <section class="bg-bg-surface/50 py-16 md:py-24">
+    <div class="mx-auto max-w-[1200px] px-6">
+      <SectionHeading title="Former Group Members" />
+
+      <div class="grid grid-cols-1 gap-4 sm:grid-cols-2 md:grid-cols-3">
+        {formerMembers.map((member) => (
+          <div class="flex items-center gap-3 rounded-lg border border-bg-elevated bg-bg-surface p-4">
+            <div class="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-bg-elevated text-sm font-medium text-text-muted">
+              {member.data.name.split(' ').map((n: string) => n[0]).join('').slice(0, 2).toUpperCase()}
+            </div>
+            <div>
+              <p class="text-sm font-medium text-text-primary">
+                {member.data.title && <span class="text-text-muted">{member.data.title} </span>}
+                {member.data.name}
+              </p>
+              {member.data.former_info && (
+                <p class="text-xs text-text-muted">{member.data.former_info}</p>
+              )}
+            </div>
+          </div>
+        ))}
+      </div>
+    </div>
+  </section>
+)}

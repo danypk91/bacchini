@@ -1,0 +1,85 @@
+<!-- GSAP ScrollTrigger animations — add to BaseLayout -->
+<script>
+  import gsap from 'gsap';
+  import { ScrollTrigger } from 'gsap/ScrollTrigger';
+
+  gsap.registerPlugin(ScrollTrigger);
+
+  function initAnimations() {
+    // Respect reduced motion preference
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+
+    // Fade-in + slide-up for sections
+    // Skip wrappers that contain animated children (.grid, .space-y-4)
+    gsap.utils.toArray<HTMLElement>('section > div').forEach((el) => {
+      if (el.querySelector('.grid, .space-y-4')) return;
+
+      gsap.fromTo(
+        el,
+        { y: 40, opacity: 0 },
+        {
+          y: 0,
+          opacity: 1,
+          duration: 0.8,
+          ease: 'power2.out',
+          scrollTrigger: { trigger: el, start: 'top 85%', once: true },
+        },
+      );
+    });
+
+    // Stagger for grid items (team cards, publication cards)
+    document.querySelectorAll<HTMLElement>('.grid').forEach((grid) => {
+      const items = Array.from(grid.children) as HTMLElement[];
+      if (items.length === 0) return;
+
+      gsap.set(items, { y: 30, opacity: 0 });
+
+      ScrollTrigger.create({
+        trigger: grid,
+        start: 'top 85%',
+        once: true,
+        onEnter: () => {
+          gsap.to(items, {
+            y: 0,
+            opacity: 1,
+            duration: 0.5,
+            stagger: 0.06,
+            ease: 'power2.out',
+          });
+        },
+      });
+    });
+
+    // Stagger for accordion items (research cards)
+    document.querySelectorAll<HTMLElement>('.space-y-4').forEach((container) => {
+      const items = Array.from(container.querySelectorAll('details')) as HTMLElement[];
+      if (items.length === 0) return;
+
+      gsap.set(items, { x: -20, opacity: 0 });
+
+      ScrollTrigger.create({
+        trigger: container,
+        start: 'top 85%',
+        once: true,
+        onEnter: () => {
+          gsap.to(items, {
+            x: 0,
+            opacity: 1,
+            duration: 0.5,
+            stagger: 0.1,
+            ease: 'power2.out',
+          });
+        },
+      });
+    });
+  }
+
+  // Initialize on page load
+  initAnimations();
+
+  // Re-initialize after Astro View Transitions navigation
+  document.addEventListener('astro:after-swap', () => {
+    ScrollTrigger.getAll().forEach((t) => t.kill());
+    initAnimations();
+  });
+</script>
