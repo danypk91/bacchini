@@ -8,6 +8,16 @@ import Button from '@components/global/Button.astro';
     <SectionHeading title="About Me" />
 
     <div class="grid gap-10 md:grid-cols-[1fr_420px] md:items-center">
+      <!-- Image on mobile (shown above text) -->
+      <div class="md:hidden">
+        <img
+          src="/images/research/about-me-plasma.png"
+          alt="Plasma simulation visualization"
+          class="w-full rounded-xl border border-bg-elevated/50 object-cover shadow-lg shadow-accent-cyan/5"
+          loading="lazy"
+        />
+      </div>
+
       <div class="max-w-3xl">
       <p class="text-lg text-text-secondary leading-relaxed">
         Since 2022, I am a BELSPO FED-tWIN Assistant Professor (Tenure-track) and Research Scientist at the
