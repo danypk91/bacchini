@@ -33,7 +33,28 @@ const colors = colorMap[color] || colorMap.cyan;
       <path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7" />
     </svg>
   </summary>
-  <div class="mt-2 rounded-xl border border-bg-elevated bg-bg-surface/50 p-6 text-text-secondary leading-relaxed">
+  <div class="research-card-content mt-2 rounded-xl border border-bg-elevated bg-bg-surface/50 p-6 text-text-secondary leading-relaxed">
     <slot />
   </div>
 </details>
+
+<style>
+  .research-card-content :global(a) {
+    color: var(--color-accent-cyan);
+    text-decoration: underline;
+    text-underline-offset: 2px;
+  }
+  .research-card-content :global(a:hover) {
+    color: var(--color-text-primary);
+  }
+  .research-card-content :global(p + p) {
+    margin-top: 0.75rem;
+  }
+  .research-card-content :global(img) {
+    cursor: zoom-in;
+    transition: opacity 0.2s;
+  }
+  .research-card-content :global(img:hover) {
+    opacity: 0.85;
+  }
+</style>

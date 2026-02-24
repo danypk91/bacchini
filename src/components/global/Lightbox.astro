@@ -1,0 +1,152 @@
+<dialog id="lightbox" class="lightbox">
+  <div class="lightbox-inner">
+    <button class="lightbox-nav lightbox-prev" aria-label="Previous image">
+      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M15 19l-7-7 7-7"/></svg>
+    </button>
+    <img src="" alt="" />
+    <button class="lightbox-nav lightbox-next" aria-label="Next image">
+      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7"/></svg>
+    </button>
+  </div>
+  <button class="lightbox-close" aria-label="Close">&times;</button>
+</dialog>
+
+<style>
+  .lightbox {
+    border: none;
+    background: none;
+    width: 100vw;
+    height: 100vh;
+    max-width: 100vw;
+    max-height: 100vh;
+    margin: 0;
+    padding: 0;
+    position: fixed;
+    inset: 0;
+  }
+  .lightbox::backdrop {
+    background: rgba(0, 0, 0, 0.85);
+    backdrop-filter: blur(4px);
+  }
+  .lightbox-inner {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .lightbox img {
+    max-width: 85vw;
+    max-height: 85vh;
+    object-fit: contain;
+    border-radius: 0.5rem;
+  }
+  .lightbox-nav {
+    position: fixed;
+    top: 50%;
+    transform: translateY(-50%);
+    color: white;
+    background: rgba(255, 255, 255, 0.1);
+    border: none;
+    border-radius: 50%;
+    width: 3rem;
+    height: 3rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    opacity: 0.6;
+    transition: opacity 0.2s, background 0.2s;
+    z-index: 10;
+  }
+  .lightbox-nav:hover {
+    opacity: 1;
+    background: rgba(255, 255, 255, 0.2);
+  }
+  .lightbox-nav.is-hidden {
+    visibility: hidden;
+    pointer-events: none;
+  }
+  .lightbox-prev {
+    left: 1rem;
+  }
+  .lightbox-next {
+    right: 1rem;
+  }
+  .lightbox-close {
+    position: fixed;
+    top: 1rem;
+    right: 1.5rem;
+    color: white;
+    background: none;
+    border: none;
+    font-size: 2.5rem;
+    cursor: pointer;
+    line-height: 1;
+    opacity: 0.7;
+    transition: opacity 0.2s;
+    z-index: 10;
+  }
+  .lightbox-close:hover {
+    opacity: 1;
+  }
+</style>
+
+<script>
+  function initLightbox() {
+    const dialog = document.getElementById('lightbox') as HTMLDialogElement | null;
+    if (!dialog || dialog.dataset.init) return;
+    dialog.dataset.init = 'true';
+
+    const dialogImg = dialog.querySelector('img') as HTMLImageElement;
+    const closeBtn = dialog.querySelector('.lightbox-close') as HTMLButtonElement;
+    const prevBtn = dialog.querySelector('.lightbox-prev') as HTMLButtonElement;
+    const nextBtn = dialog.querySelector('.lightbox-next') as HTMLButtonElement;
+
+    let gallery: HTMLImageElement[] = [];
+    let currentIndex = 0;
+
+    function show(index: number) {
+      currentIndex = index;
+      dialogImg.src = gallery[index].src;
+      dialogImg.alt = gallery[index].alt;
+      prevBtn.classList.toggle('is-hidden', index === 0);
+      nextBtn.classList.toggle('is-hidden', index === gallery.length - 1);
+    }
+
+    function prev() { if (currentIndex > 0) show(currentIndex - 1); }
+    function next() { if (currentIndex < gallery.length - 1) show(currentIndex + 1); }
+
+    document.querySelectorAll('.research-card-content').forEach((card) => {
+      const imgs = Array.from(card.querySelectorAll('img')) as HTMLImageElement[];
+      imgs.forEach((img, i) => {
+        img.addEventListener('click', () => {
+          gallery = imgs;
+          show(i);
+          dialog.showModal();
+        });
+      });
+    });
+
+    prevBtn.addEventListener('click', prev);
+    nextBtn.addEventListener('click', next);
+    closeBtn.addEventListener('click', () => dialog.close());
+
+    dialog.addEventListener('click', (e) => {
+      const target = e.target as HTMLElement;
+      // Don't close if clicking on img, nav buttons, or their children
+      if (target === dialogImg) return;
+      if (target.closest('.lightbox-nav')) return;
+      if (target.closest('.lightbox-close')) return;
+      dialog.close();
+    });
+
+    document.addEventListener('keydown', (e) => {
+      if (!dialog.open) return;
+      if (e.key === 'ArrowLeft') { e.preventDefault(); prev(); }
+      if (e.key === 'ArrowRight') { e.preventDefault(); next(); }
+    });
+  }
+
+  document.addEventListener('astro:page-load', initLightbox);
+</script>

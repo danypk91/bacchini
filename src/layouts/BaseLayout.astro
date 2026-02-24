@@ -5,6 +5,7 @@ import Header from '@components/global/Header.astro';
 import Footer from '@components/global/Footer.astro';
 import QuoteSection from '@components/global/QuoteSection.astro';
 import ScrollAnimations from '@components/global/ScrollAnimations.astro';
+import Lightbox from '@components/global/Lightbox.astro';
 import '../styles/global.css';
 
 interface Props {
@@ -40,5 +41,6 @@ const { title, description, ogImage } = Astro.props;
     <QuoteSection />
     <Footer />
     <ScrollAnimations />
+    <Lightbox />
   </body>
 </html>

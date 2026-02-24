@@ -4,24 +4,31 @@ import HeroAnimation from '@components/interactive/HeroAnimation';
 ---
 
 <section class="relative flex min-h-screen items-center overflow-hidden">
-  <!-- Background gradient -->
+  <!-- Background simulation image -->
+  <div class="absolute inset-0">
+    <img
+      src="/images/hero-simulation.png"
+      alt=""
+      class="h-full w-full object-cover"
+      loading="eager"
+      fetchpriority="high"
+    />
+  </div>
+
+  <!-- Dark overlay for text readability -->
   <div
     class="absolute inset-0"
-    style="background: linear-gradient(135deg, #0a0a0f 0%, #1a1a2e 50%, #16213e 100%);"
+    style="background: radial-gradient(ellipse at center, rgba(10,10,15,0.7) 0%, rgba(10,10,15,0.5) 50%, rgba(10,10,15,0.3) 100%);"
+  ></div>
+
+  <!-- Top/bottom vignette for blending with site -->
+  <div
+    class="absolute inset-0"
+    style="background: linear-gradient(to bottom, rgba(10,10,15,0.8) 0%, transparent 20%, transparent 80%, rgba(10,10,15,1) 100%);"
   ></div>
 
   <!-- Three.js particle animation -->
   <HeroAnimation client:only="react" />
-
-  <!-- Animated glow orbs -->
-  <div
-    class="absolute left-1/2 top-1/3 h-[600px] w-[600px] -translate-x-1/2 -translate-y-1/2 rounded-full opacity-20 blur-3xl"
-    style="background: radial-gradient(circle, rgba(0,212,255,0.2) 0%, transparent 70%);"
-  ></div>
-  <div
-    class="absolute right-1/4 bottom-1/4 h-[400px] w-[400px] rounded-full opacity-10 blur-3xl"
-    style="background: radial-gradient(circle, rgba(124,58,237,0.3) 0%, transparent 70%);"
-  ></div>
 
   <div class="relative z-10 mx-auto flex max-w-[1200px] flex-col items-center px-6 py-32 text-center">
     <!-- Logo -->

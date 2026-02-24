@@ -77,6 +77,11 @@
   // Initialize on page load
   initAnimations();
 
+  // Refresh ScrollTrigger when publication filters change the layout
+  window.addEventListener('publications:filtered', () => {
+    ScrollTrigger.refresh();
+  });
+
   // Re-initialize after Astro View Transitions navigation
   document.addEventListener('astro:after-swap', () => {
     ScrollTrigger.getAll().forEach((t) => t.kill());

@@ -54,6 +54,11 @@ export default function PublicationFilter({ years, totalCount }: Props) {
     });
 
     setVisibleCount(count);
+
+    // Notify ScrollTrigger that layout changed so it recalculates positions
+    requestAnimationFrame(() => {
+      window.dispatchEvent(new CustomEvent('publications:filtered'));
+    });
   }, []);
 
   // Pill button style helper
