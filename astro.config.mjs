@@ -7,7 +7,7 @@ import sitemap from '@astrojs/sitemap';
 
 // https://astro.build/config
 export default defineConfig({
-  site: 'https://fabiobacchini.com',
+  site: 'https://bacchini.vercel.app',
 
   vite: {
     plugins: [tailwindcss()],
