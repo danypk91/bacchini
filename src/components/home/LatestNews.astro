@@ -4,8 +4,10 @@ import { getCollection } from 'astro:content';
 
 const allNews = await getCollection('news');
 const news = allNews
-  .sort((a, b) => b.data.date.getTime() - a.data.date.getTime())
-  .slice(0, 5);
+  .sort((a, b) => b.data.date.getTime() - a.data.date.getTime());
+
+const VISIBLE_COUNT = 5;
+const hasMore = news.length > VISIBLE_COUNT;
 
 function formatDate(date: Date): string {
   return date.toLocaleDateString('en-US', { month: 'long', year: 'numeric' });
@@ -16,13 +18,18 @@ function formatDate(date: Date): string {
   <div class="mx-auto max-w-[1200px] px-6">
     <SectionHeading title="Latest News" />
 
-    <div class="relative ml-4 md:ml-0">
+    <div class="relative ml-4 md:ml-0" id="news-timeline">
       <!-- Timeline line -->
       <div class="absolute left-0 top-0 bottom-0 w-px bg-gradient-to-b from-accent-cyan/40 via-accent-cyan/20 to-transparent md:left-0"></div>
 
       <div class="space-y-8">
         {news.map((item, index) => (
-          <div class="relative pl-8 md:pl-10">
+          <div
+            class:list={[
+              'relative pl-8 md:pl-10',
+              index >= VISIBLE_COUNT && 'news-hidden'
+            ]}
+          >
             <!-- Timeline dot -->
             <div class="absolute left-0 top-1.5 -translate-x-1/2">
               <div class="relative">
@@ -38,9 +45,7 @@ function formatDate(date: Date): string {
               <time class="text-xs font-medium uppercase tracking-wider text-text-muted">
                 {formatDate(item.data.date)}
               </time>
-              <p class="mt-1 text-text-secondary leading-relaxed">
-                {item.data.title}
-              </p>
+              <p class="mt-1 text-text-secondary leading-relaxed news-content" set:html={item.data.title} />
               {item.data.link && (
                 <a
                   href={item.data.link}
@@ -58,6 +63,79 @@ function formatDate(date: Date): string {
           </div>
         ))}
       </div>
+
+      {hasMore && (
+        <button
+          id="news-toggle"
+          class="mt-8 ml-8 md:ml-10 inline-flex items-center gap-2 text-sm font-medium text-accent-cyan transition-colors hover:text-accent-cyan/80 cursor-pointer"
+        >
+          <span class="news-toggle-text">Show older news</span>
+          <svg class="h-4 w-4 transition-transform duration-300 news-toggle-icon" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7" />
+          </svg>
+        </button>
+      )}
     </div>
   </div>
 </section>
+
+<style>
+  .news-content :global(a) {
+    color: var(--color-accent-cyan);
+    text-decoration: underline;
+    text-underline-offset: 2px;
+    transition: color 0.2s;
+  }
+  .news-content :global(a:hover) {
+    color: color-mix(in srgb, var(--color-accent-cyan) 80%, white);
+  }
+  .news-hidden {
+    display: none;
+  }
+  .news-expanded .news-hidden {
+    display: block;
+    animation: news-fade-in 0.4s ease-out both;
+  }
+  @keyframes news-fade-in {
+    from {
+      opacity: 0;
+      transform: translateY(-8px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+  .news-expanded .news-hidden:nth-child(6) { animation-delay: 0ms; }
+  .news-expanded .news-hidden:nth-child(7) { animation-delay: 40ms; }
+  .news-expanded .news-hidden:nth-child(8) { animation-delay: 80ms; }
+  .news-expanded .news-hidden:nth-child(9) { animation-delay: 120ms; }
+  .news-expanded .news-hidden:nth-child(10) { animation-delay: 160ms; }
+  .news-expanded .news-hidden:nth-child(11) { animation-delay: 200ms; }
+  .news-expanded .news-hidden:nth-child(12) { animation-delay: 240ms; }
+  .news-expanded .news-hidden:nth-child(13) { animation-delay: 280ms; }
+  .news-expanded .news-hidden:nth-child(14) { animation-delay: 320ms; }
+  .news-expanded .news-hidden:nth-child(15) { animation-delay: 360ms; }
+  .news-expanded .news-hidden:nth-child(16) { animation-delay: 400ms; }
+  .news-expanded .news-hidden:nth-child(17) { animation-delay: 440ms; }
+  .news-expanded .news-hidden:nth-child(18) { animation-delay: 480ms; }
+  .news-expanded .news-hidden:nth-child(19) { animation-delay: 520ms; }
+  .news-expanded .news-hidden:nth-child(20) { animation-delay: 560ms; }
+</style>
+
+<script>
+  const timeline = document.getElementById('news-timeline');
+  const toggle = document.getElementById('news-toggle');
+  if (timeline && toggle) {
+    const text = toggle.querySelector('.news-toggle-text')!;
+    const icon = toggle.querySelector('.news-toggle-icon')!;
+    let expanded = false;
+
+    toggle.addEventListener('click', () => {
+      expanded = !expanded;
+      timeline.classList.toggle('news-expanded', expanded);
+      text.textContent = expanded ? 'Show less' : 'Show older news';
+      icon.classList.toggle('rotate-180', expanded);
+    });
+  }
+</script>
