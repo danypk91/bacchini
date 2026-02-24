@@ -13,6 +13,20 @@ const stats = [
     <SectionHeading title="About" />
 
     <div class="grid grid-cols-1 gap-12 md:grid-cols-5">
+      <!-- Photo column (2/5) -->
+      <div class="md:col-span-2">
+        <div class="overflow-hidden rounded-2xl border border-bg-elevated">
+          <img
+            src="/images/fabio-bacchini.jpg"
+            alt="Fabio Bacchini"
+            width="568"
+            height="606"
+            class="h-auto w-full object-cover"
+            loading="lazy"
+          />
+        </div>
+      </div>
+
       <!-- Text column (3/5) -->
       <div class="md:col-span-3">
         <p class="text-text-secondary leading-relaxed">
@@ -41,20 +55,18 @@ const stats = [
           particle-in-cell methods and high-performance computing.
         </p>
       </div>
+    </div>
 
-      <!-- Stats column (2/5) -->
-      <div class="md:col-span-2">
-        <div class="grid grid-cols-3 gap-4 md:grid-cols-1 md:gap-6">
-          {stats.map((stat) => (
-            <div class="rounded-xl border border-bg-elevated bg-bg-surface p-5 text-center md:text-left">
-              <div class:list={['font-heading text-3xl font-bold md:text-4xl', stat.color]}>
-                {stat.value}
-              </div>
-              <div class="mt-1 text-sm text-text-muted">{stat.label}</div>
-            </div>
-          ))}
+    <!-- Stats row -->
+    <div class="mt-12 grid grid-cols-3 gap-4">
+      {stats.map((stat) => (
+        <div class="rounded-xl border border-bg-elevated bg-bg-surface p-5 text-center">
+          <div class:list={['font-heading text-3xl font-bold md:text-4xl', stat.color]}>
+            {stat.value}
+          </div>
+          <div class="mt-1 text-sm text-text-muted">{stat.label}</div>
         </div>
-      </div>
+      ))}
     </div>
   </div>
 </section>
