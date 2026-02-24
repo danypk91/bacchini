@@ -3,6 +3,7 @@ import { ViewTransitions } from 'astro:transitions';
 import SEOHead from '@components/global/SEOHead.astro';
 import Header from '@components/global/Header.astro';
 import Footer from '@components/global/Footer.astro';
+import QuoteSection from '@components/global/QuoteSection.astro';
 import ScrollAnimations from '@components/global/ScrollAnimations.astro';
 import '../styles/global.css';
 
@@ -36,6 +37,7 @@ const { title, description, ogImage } = Astro.props;
       <slot />
     </main>
 
+    <QuoteSection />
     <Footer />
     <ScrollAnimations />
   </body>
