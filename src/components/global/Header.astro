@@ -106,7 +106,7 @@ function isActive(href: string, current: string): boolean {
               ? 'text-accent-cyan'
               : 'text-text-muted hover:text-text-primary',
           ]}
-          style={`transition-delay: ${i * 60}ms;`}
+           style={`transition-delay: ${50 + i * 70}ms;`}
         >
           {isActive(link.href, currentPath) && (
             <span class="absolute left-0 top-1/2 h-6 w-1 -translate-y-1/2 rounded-full bg-accent-cyan" />
@@ -147,6 +147,12 @@ function isActive(href: string, current: string): boolean {
 
     // Link inside mobile menu
     if (target.closest('#mobile-menu a')) {
+      closeMenu();
+      return;
+    }
+
+    // Click on overlay background (not on nav content or buttons)
+    if (isMenuOpen && target.closest('#mobile-menu') && !target.closest('nav') && !target.closest('button')) {
       closeMenu();
       return;
     }
