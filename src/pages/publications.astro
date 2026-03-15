@@ -8,12 +8,52 @@ import PageHero from '@components/global/PageHero.astro';
 const allPubs = await getCollection('publications');
 const totalCount = allPubs.length;
 const years = [...new Set(allPubs.map((p) => p.data.year))].sort((a, b) => b - a);
+
+const firstAuthorPubs = allPubs
+  .filter(p => p.data.fabio_position === 'first')
+  .sort((a, b) => b.data.year - a.data.year)
+  .slice(0, 10);
+
+const pubsSchema = {
+  "@context": "https://schema.org",
+  "@type": "ItemList",
+  "name": "Publications by Fabio Bacchini",
+  "description": "Peer-reviewed publications in astrophysics, plasma physics, and computational methods",
+  "numberOfItems": totalCount,
+  "itemListElement": firstAuthorPubs.map((pub, i) => ({
+    "@type": "ListItem",
+    "position": i + 1,
+    "item": {
+      "@type": "ScholarlyArticle",
+      "name": pub.data.title,
+      "author": pub.data.authors,
+      "datePublished": String(pub.data.year),
+      "isPartOf": {
+        "@type": "Periodical",
+        "name": pub.data.journal,
+      },
+      ...(pub.data.doi ? { "identifier": `https://doi.org/${pub.data.doi}` } : {}),
+      ...(pub.data.arxiv ? { "url": `https://arxiv.org/abs/${pub.data.arxiv}` } : {}),
+    },
+  })),
+};
 ---
 
 <BaseLayout
-  title="Publications"
+  title="Publications, Astrophysicist"
   description="Complete list of publications by Fabio Bacchini — peer-reviewed papers in astrophysics, plasma physics, and computational methods."
+  ogImage="/images/og/publications.png"
 >
+  <script type="application/ld+json" slot="head" set:html={JSON.stringify(pubsSchema)} />
+  <script type="application/ld+json" slot="head" set:html={JSON.stringify({
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    "itemListElement": [
+      { "@type": "ListItem", "position": 1, "name": "Home", "item": "https://fabiobacchini.com/" },
+      { "@type": "ListItem", "position": 2, "name": "Publications", "item": "https://fabiobacchini.com/publications/" }
+    ]
+  })} />
+
   <PageHero
     title="Publications"
     subtitle={`Complete list of peer-reviewed publications — ${totalCount} papers.`}

@@ -13,9 +13,19 @@ const projects = allResearch.sort((a, b) => a.data.order - b.data.order);
 ---
 
 <BaseLayout
-  title="Research"
+  title="Plasma Astrophysics Research"
   description="Research projects, team members, and academic profile of Fabio Bacchini — astrophysical plasma simulations, particle-in-cell methods, and high-performance computing."
+  ogImage="/images/og/research.png"
 >
+  <script type="application/ld+json" slot="head" set:html={JSON.stringify({
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    "itemListElement": [
+      { "@type": "ListItem", "position": 1, "name": "Home", "item": "https://fabiobacchini.com/" },
+      { "@type": "ListItem", "position": 2, "name": "Research", "item": "https://fabiobacchini.com/research/" }
+    ]
+  })} />
+
   <PageHero
     title="Research"
     subtitle="Academic profile, current research projects, and team members."

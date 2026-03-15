@@ -5,9 +5,19 @@ import PageHero from '@components/global/PageHero.astro';
 ---
 
 <BaseLayout
-  title="Contact"
-  description="Contact Fabio Bacchini — KU Leuven and BIRA-IASB office addresses, email, and academic profiles."
+  title="Contact | KU Leuven & BIRA-IASB"
+  description="Contact Fabio Bacchini, astrophysicist at KU Leuven and BIRA-IASB. Office addresses in Leuven and Brussels, email, Google Scholar, ORCID, and ResearchGate profiles."
+  ogImage="/images/og/contact.png"
 >
+  <script type="application/ld+json" slot="head" set:html={JSON.stringify({
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    "itemListElement": [
+      { "@type": "ListItem", "position": 1, "name": "Home", "item": "https://fabiobacchini.com/" },
+      { "@type": "ListItem", "position": 2, "name": "Contact", "item": "https://fabiobacchini.com/contact/" }
+    ]
+  })} />
+
   <PageHero
     title="Contact"
     subtitle="Get in touch for research collaborations, academic inquiries, or just to say hello."

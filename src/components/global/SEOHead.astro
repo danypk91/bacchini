@@ -16,7 +16,7 @@ const {
 const siteUrl = Astro.site?.toString().replace(/\/$/, '') ?? '';
 const canonicalUrl = canonical ?? Astro.url.href;
 const fullTitle = title === 'Home'
-  ? 'Fabio Bacchini — Astrophysicist'
+  ? 'Fabio Bacchini — Astrophysicist at KU Leuven'
   : `${title} — Fabio Bacchini`;
 ---
 
@@ -29,7 +29,9 @@ const fullTitle = title === 'Home'
 <link rel="canonical" href={canonicalUrl} />
 
 <!-- Favicon -->
+<meta name="theme-color" content="#0a0a0f" />
 <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
 
 <!-- Preconnect & preload critical fonts -->
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -38,6 +40,8 @@ const fullTitle = title === 'Home'
 
 <!-- Open Graph -->
 <meta property="og:type" content="website" />
+<meta property="og:site_name" content="Fabio Bacchini" />
+<meta property="og:locale" content="en_US" />
 <meta property="og:url" content={canonicalUrl} />
 <meta property="og:title" content={fullTitle} />
 <meta property="og:description" content={description} />
@@ -55,18 +59,33 @@ const fullTitle = title === 'Home'
   "@type": "Person",
   "name": "Fabio Bacchini",
   "jobTitle": "Assistant Professor & Research Scientist",
-  "affiliation": [
+  "url": siteUrl,
+  "worksFor": [
     {
-      "@type": "Organization",
+      "@type": "CollegeOrUniversity",
       "name": "KU Leuven",
-      "department": "Centre for mathematical Plasma Astrophysics (CmPA)"
+      "department": "Centre for mathematical Plasma Astrophysics (CmPA)",
+      "url": "https://wis.kuleuven.be/CmPA"
     },
     {
-      "@type": "Organization",
-      "name": "BIRA-IASB",
-      "alternateName": "Royal Belgian Institute for Space Aeronomy"
+      "@type": "ResearchOrganization",
+      "name": "Royal Belgian Institute for Space Aeronomy",
+      "alternateName": "BIRA-IASB",
+      "url": "https://www.aeronomie.be"
     }
   ],
-  "url": siteUrl,
-  "email": ["fabio.bacchini@kuleuven.be", "fabio.bacchini@aeronomie.be"]
+  "email": ["fabio.bacchini@kuleuven.be", "fabio.bacchini@aeronomie.be"],
+  "sameAs": [
+    "https://scholar.google.com/citations?user=lVDg704AAAAJ",
+    "https://orcid.org/0000-0002-7526-8154",
+    "https://www.researchgate.net/profile/Fabio-Bacchini-2",
+    "https://www.linkedin.com/in/fabio-bacchini-484766163/"
+  ],
+  "knowsAbout": [
+    "plasma astrophysics",
+    "particle-in-cell simulations",
+    "high-performance computing",
+    "magnetohydrodynamics",
+    "magnetic reconnection"
+  ]
 })} />
