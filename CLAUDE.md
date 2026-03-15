@@ -63,11 +63,17 @@ Structured content lives in `src/content/` with schemas defined in `src/content.
 - "Bacchini" is bolded in publication author lists — see `src/utils/formatters.ts`
 - View Transitions enabled for smooth page navigation
 
+## Git Commits
+
+- Never include `Co-Authored-By` or any mention of Claude/AI in commit messages
+
 ## Deployment
 
-Hosted on Vercel. Production URL: https://bacchini.vercel.app. Pushes to `main` trigger automatic deploys.
+Hosted on Vercel. Production URL: https://fabiobacchini.com. Pushes to `main` trigger automatic deploys.
 
 ## Reference Docs
 
 - STRUTTURA.md — detailed page-by-page content spec and implementation checklist
 - TECNOLOGIE.md — design tokens, color palette, typography scale, and technical decisions
+- SEO.md — SEO audit checklist and fix details
+- SEO-WORDS.md — keyword analysis and optimization plan
