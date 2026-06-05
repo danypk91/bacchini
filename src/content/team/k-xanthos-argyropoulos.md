@@ -1,7 +1,7 @@
 ---
 name: "K.-Xanthos Argyropoulos"
 role: "PhD Student"
-photo: "/images/team/xanthos-argyropoulos.jpg"
+photo: "/images/team/k-xanthos-argyropoulos.jpg"
 status: current
-order: 11
+order: 13
 ---
