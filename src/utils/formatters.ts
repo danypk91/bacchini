@@ -1,7 +1,7 @@
 /**
- * Highlights "Bacchini" in an author string by wrapping it in <strong> tags.
+ * Highlights "Bacchini, F." in an author string by wrapping it in <strong> tags.
  */
-export function highlightAuthor(authors: string, name = 'Bacchini'): string {
+export function highlightAuthor(authors: string, name = 'Bacchini, F.'): string {
   return authors.replace(
     new RegExp(`(${name})`, 'g'),
     '<strong class="text-text-primary font-semibold">$1</strong>',
