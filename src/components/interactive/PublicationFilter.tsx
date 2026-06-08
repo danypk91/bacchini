@@ -103,7 +103,7 @@ export default function PublicationFilter({ years, totalCount }: Props) {
           First Author
         </button>
         <button onClick={() => applyFilter('highlighted')} className={pillClass('highlighted')}>
-          Highlighted
+          Highlights
         </button>
       </div>
 
