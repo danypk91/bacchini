@@ -8,7 +8,7 @@ const allPubs = await getCollection('publications');
 // Sort by year (desc), then by fabio_position priority
 const sorted = allPubs.sort((a, b) => {
   if (b.data.year !== a.data.year) return b.data.year - a.data.year;
-  const posOrder = { first: 0, 'co-first': 1, contributing: 2 };
+  const posOrder = { first: 0, 'co-main': 1, contributing: 2 };
   return (posOrder[a.data.fabio_position] ?? 2) - (posOrder[b.data.fabio_position] ?? 2);
 });
 

@@ -12,7 +12,7 @@ interface Props {
   arxiv?: string | null;
   highlight?: boolean;
   highlightLabel?: string | null;
-  fabioPosition?: 'first' | 'co-first' | 'contributing';
+  fabioPosition?: 'first' | 'co-main' | 'contributing';
 }
 
 const { title, authors, year, journal, status, doi, arxiv, highlight = false, highlightLabel, fabioPosition = 'contributing' } = Astro.props;
@@ -45,8 +45,8 @@ const statusStyles: Record<string, { variant: 'cyan' | 'violet' | 'orange' | 'de
     {fabioPosition === 'first' && (
       <Badge variant="cyan" size="sm">First Author</Badge>
     )}
-    {fabioPosition === 'co-first' && (
-      <Badge variant="cyan" size="sm">Co-First Author</Badge>
+    {fabioPosition === 'co-main' && (
+      <Badge variant="cyan" size="sm">Co-Main Author</Badge>
     )}
     {highlight && highlightLabel && (
       <Badge variant="orange" size="sm">

@@ -13,7 +13,7 @@ const publications = defineCollection({
     arxiv: z.string().nullable().optional(),
     highlight: z.boolean().default(false),
     highlight_label: z.string().nullable().optional(),
-    fabio_position: z.enum(['first', 'co-first', 'contributing']).default('contributing'),
+    fabio_position: z.enum(['first', 'co-main', 'contributing']).default('contributing'),
   }),
 });
 

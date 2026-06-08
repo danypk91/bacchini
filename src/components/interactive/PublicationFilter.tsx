@@ -23,7 +23,7 @@ export default function PublicationFilter({ years, totalCount }: Props) {
       if (filter === 'all') {
         show = true;
       } else if (filter === 'first-author') {
-        show = card.dataset.position === 'first' || card.dataset.position === 'co-first';
+        show = card.dataset.position === 'first' || card.dataset.position === 'co-main';
       } else if (filter === 'highlighted') {
         show = card.dataset.highlight === 'true';
       } else {
