@@ -64,23 +64,23 @@ export default function PublicationFilter({ years, tags, totalCount }: Props) {
 
     setVisibleCount(count);
 
-    // Scroll back to the top of the publications section AFTER the layout has
-    // reflowed (cards were shown/hidden above). Doing it in the next frame
-    // avoids the smooth scroll being cancelled by the height change, which was
-    // making it appear to "not work".
-    requestAnimationFrame(() => {
-      const section = document.getElementById('publications-list');
-      if (section) {
-        const headerOffset = 72; // fixed header height (nav py-4 + content)
-        const top = section.getBoundingClientRect().top + window.scrollY - headerOffset;
-        window.scrollTo({ top, behavior: 'smooth' });
-      } else {
-        window.scrollTo({ top: 0, behavior: 'smooth' });
-      }
+    // Notify ScrollTrigger FIRST so it can refresh (which internally saves and
+    // restores the scroll position). We must scroll AFTER that refresh,
+    // otherwise ScrollTrigger.refresh() restores the previous scroll position
+    // and cancels our scroll-to-top.
+    window.dispatchEvent(new CustomEvent('publications:filtered'));
 
-      // Notify ScrollTrigger that layout changed so it recalculates positions
-      window.dispatchEvent(new CustomEvent('publications:filtered'));
-    });
+    // Scroll back to the top of the publications section after the layout has
+    // reflowed and ScrollTrigger has refreshed. A small timeout ensures we run
+    // after GSAP's synchronous refresh work.
+    setTimeout(() => {
+      const section = document.getElementById('publications-list');
+      const headerOffset = 72; // fixed header height (nav py-4 + content)
+      const top = section
+        ? section.getBoundingClientRect().top + window.scrollY - headerOffset
+        : 0;
+      window.scrollTo({ top: Math.max(top, 0), behavior: 'smooth' });
+    }, 60);
   }, []);
 
   // Pill button style helper
