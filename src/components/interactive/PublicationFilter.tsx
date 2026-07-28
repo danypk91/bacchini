@@ -64,19 +64,21 @@ export default function PublicationFilter({ years, tags, totalCount }: Props) {
 
     setVisibleCount(count);
 
-    // Scroll back to the top of the publications section when a filter is
-    // applied (accounting for the sticky header/filter bar).
-    const section = document.getElementById('publications-list');
-    if (section) {
-      const headerOffset = 64; // sticky header height (top-16)
-      const top = section.getBoundingClientRect().top + window.scrollY - headerOffset;
-      window.scrollTo({ top, behavior: 'smooth' });
-    } else {
-      window.scrollTo({ top: 0, behavior: 'smooth' });
-    }
-
-    // Notify ScrollTrigger that layout changed so it recalculates positions
+    // Scroll back to the top of the publications section AFTER the layout has
+    // reflowed (cards were shown/hidden above). Doing it in the next frame
+    // avoids the smooth scroll being cancelled by the height change, which was
+    // making it appear to "not work".
     requestAnimationFrame(() => {
+      const section = document.getElementById('publications-list');
+      if (section) {
+        const headerOffset = 72; // fixed header height (nav py-4 + content)
+        const top = section.getBoundingClientRect().top + window.scrollY - headerOffset;
+        window.scrollTo({ top, behavior: 'smooth' });
+      } else {
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+      }
+
+      // Notify ScrollTrigger that layout changed so it recalculates positions
       window.dispatchEvent(new CustomEvent('publications:filtered'));
     });
   }, []);
