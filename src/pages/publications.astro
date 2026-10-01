@@ -8,6 +8,9 @@ import PageHero from '@components/global/PageHero.astro';
 const allPubs = await getCollection('publications');
 const totalCount = allPubs.length;
 const years = [...new Set(allPubs.map((p) => p.data.year))].sort((a, b) => b - a);
+const tags = [...new Set(allPubs.flatMap((p) => p.data.tags))].sort((a, b) =>
+  a.localeCompare(b)
+);
 
 const firstAuthorPubs = allPubs
   .filter(p => p.data.fabio_position === 'first')
@@ -66,9 +69,9 @@ const pubsSchema = {
   </PageHero>
 
   <!-- Publication Filter + List -->
-  <section class="py-16 md:py-24">
+  <section id="publications-list" class="py-16 md:py-24">
     <div class="mx-auto max-w-[1200px] px-6">
-      <PublicationFilter client:load years={years} totalCount={totalCount} />
+      <PublicationFilter client:load years={years} tags={tags} totalCount={totalCount} />
       <div class="mt-8">
         <PublicationList />
       </div>

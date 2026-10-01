@@ -2,12 +2,14 @@ import { useState, useCallback } from 'react';
 
 interface Props {
   years: number[];
+  tags: string[];
   totalCount: number;
 }
 
-type FilterType = 'all' | 'year' | 'first-author' | 'highlighted';
+// Internal prefix used to distinguish tag filters from year/special filters
+const TAG_PREFIX = 'tag:';
 
-export default function PublicationFilter({ years, totalCount }: Props) {
+export default function PublicationFilter({ years, tags, totalCount }: Props) {
   const [activeFilter, setActiveFilter] = useState<string>('all');
   const [visibleCount, setVisibleCount] = useState(totalCount);
 
@@ -18,6 +20,9 @@ export default function PublicationFilter({ years, totalCount }: Props) {
     const dividers = document.querySelectorAll<HTMLElement>('[data-year-divider]');
     let count = 0;
 
+    const isTag = filter.startsWith(TAG_PREFIX);
+    const tagValue = isTag ? filter.slice(TAG_PREFIX.length) : '';
+
     cards.forEach((card) => {
       let show = false;
       if (filter === 'all') {
@@ -26,6 +31,9 @@ export default function PublicationFilter({ years, totalCount }: Props) {
         show = card.dataset.position === 'first' || card.dataset.position === 'co-main';
       } else if (filter === 'highlighted') {
         show = card.dataset.highlight === 'true';
+      } else if (isTag) {
+        const cardTags = (card.dataset.tags ?? '').split('|').filter(Boolean);
+        show = cardTags.includes(tagValue);
       } else {
         // Year filter
         show = card.dataset.year === filter;
@@ -40,11 +48,12 @@ export default function PublicationFilter({ years, totalCount }: Props) {
       const year = divider.dataset.yearDivider;
       if (filter === 'all') {
         divider.style.display = '';
-      } else if (!isNaN(Number(filter))) {
+      } else if (!isTag && !isNaN(Number(filter))) {
         // Year filter: only show matching divider
         divider.style.display = year === filter ? '' : 'none';
       } else {
-        // For first-author or highlighted, check if any card in that year is visible
+        // For first-author, highlighted or tag filters, check if any card in
+        // that year is visible
         const yearCards = document.querySelectorAll<HTMLElement>(
           `[data-pub-card][data-year="${year}"]`
         );
@@ -55,10 +64,23 @@ export default function PublicationFilter({ years, totalCount }: Props) {
 
     setVisibleCount(count);
 
-    // Notify ScrollTrigger that layout changed so it recalculates positions
-    requestAnimationFrame(() => {
-      window.dispatchEvent(new CustomEvent('publications:filtered'));
-    });
+    // Notify ScrollTrigger FIRST so it can refresh (which internally saves and
+    // restores the scroll position). We must scroll AFTER that refresh,
+    // otherwise ScrollTrigger.refresh() restores the previous scroll position
+    // and cancels our scroll-to-top.
+    window.dispatchEvent(new CustomEvent('publications:filtered'));
+
+    // Scroll back to the top of the publications section after the layout has
+    // reflowed and ScrollTrigger has refreshed. A small timeout ensures we run
+    // after GSAP's synchronous refresh work.
+    setTimeout(() => {
+      const section = document.getElementById('publications-list');
+      const headerOffset = 72; // fixed header height (nav py-4 + content)
+      const top = section
+        ? section.getBoundingClientRect().top + window.scrollY - headerOffset
+        : 0;
+      window.scrollTo({ top: Math.max(top, 0), behavior: 'smooth' });
+    }, 60);
   }, []);
 
   // Pill button style helper
@@ -105,6 +127,22 @@ export default function PublicationFilter({ years, totalCount }: Props) {
         <button onClick={() => applyFilter('highlighted')} className={pillClass('highlighted')}>
           Highlights
         </button>
+
+        {/* Tag filters */}
+        {tags.length > 0 && (
+          <>
+            <div className="mx-1 h-4 w-px bg-[#1a1a2e]" />
+            {tags.map((tag) => (
+              <button
+                key={tag}
+                onClick={() => applyFilter(TAG_PREFIX + tag)}
+                className={pillClass(TAG_PREFIX + tag)}
+              >
+                {tag}
+              </button>
+            ))}
+          </>
+        )}
       </div>
 
       {/* Result count */}

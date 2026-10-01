@@ -13,9 +13,10 @@ interface Props {
   highlight?: boolean;
   highlightLabel?: string | null;
   fabioPosition?: 'first' | 'co-main' | 'contributing';
+  tags?: string[];
 }
 
-const { title, authors, year, journal, status, doi, arxiv, highlight = false, highlightLabel, fabioPosition = 'contributing' } = Astro.props;
+const { title, authors, year, journal, status, doi, arxiv, highlight = false, highlightLabel, fabioPosition = 'contributing', tags = [] } = Astro.props;
 
 const statusStyles: Record<string, { variant: 'cyan' | 'violet' | 'orange' | 'default'; label: string }> = {
   published: { variant: 'cyan', label: 'Published' },
@@ -30,6 +31,7 @@ const statusStyles: Record<string, { variant: 'cyan' | 'violet' | 'orange' | 'de
   data-status={status}
   data-position={fabioPosition}
   data-highlight={String(highlight)}
+  data-tags={tags.join('|')}
   class:list={[
     'rounded-xl border p-5 transition-all duration-200',
     highlight
@@ -74,6 +76,17 @@ const statusStyles: Record<string, { variant: 'cyan' | 'violet' | 'orange' | 'de
     <p class="mt-1 text-sm text-text-secondary">
       <span class="italic">{journal}</span>
     </p>
+  )}
+
+  <!-- Tags -->
+  {tags.length > 0 && (
+    <div class="mt-2.5 flex flex-wrap gap-1.5">
+      {tags.map((tag) => (
+        <span class="rounded-full border border-bg-elevated bg-bg-elevated/40 px-2.5 py-0.5 text-xs text-text-muted">
+          {tag}
+        </span>
+      ))}
+    </div>
   )}
 
   <!-- Links -->

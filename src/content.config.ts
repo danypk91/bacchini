@@ -14,6 +14,7 @@ const publications = defineCollection({
     highlight: z.boolean().default(false),
     highlight_label: z.string().nullable().optional(),
     fabio_position: z.enum(['first', 'co-main', 'contributing']).default('contributing'),
+    tags: z.array(z.string()).default([]),
   }),
 });
 
