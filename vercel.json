@@ -3,15 +3,15 @@
   "trailingSlash": true,
   "redirects": [
     {
-      "source": "/:path*",
+      "source": "/(.*)",
       "has": [{ "type": "host", "value": "bacchini.vercel.app" }],
-      "destination": "https://fabiobacchini.com/:path*",
+      "destination": "https://fabiobacchini.com/$1",
       "permanent": true
     }
   ],
   "headers": [
     {
-      "source": "/:path*",
+      "source": "/(.*)",
       "has": [{ "type": "host", "value": "(?<sub>.+)\\.vercel\\.app" }],
       "headers": [{ "key": "X-Robots-Tag", "value": "noindex, nofollow" }]
     }
