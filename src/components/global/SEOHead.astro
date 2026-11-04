@@ -15,9 +15,95 @@ const {
 
 const siteUrl = Astro.site?.toString().replace(/\/$/, '') ?? '';
 const canonicalUrl = canonical ?? Astro.url.href;
-const fullTitle = title === 'Home'
-  ? 'Fabio Bacchini — Astrophysicist at KU Leuven'
+const isHome = title === 'Home';
+const fullTitle = isHome
+  ? 'Fabio Bacchini — Plasma Astrophysicist at KU Leuven & BIRA-IASB'
   : `${title} — Fabio Bacchini`;
+
+const personId = `${siteUrl}/#person`;
+const websiteId = `${siteUrl}/#website`;
+
+const person = {
+  "@type": "Person",
+  "@id": personId,
+  "name": "Fabio Bacchini",
+  "givenName": "Fabio",
+  "familyName": "Bacchini",
+  "honorificPrefix": "Dr.",
+  "jobTitle": "Assistant Professor & Research Scientist",
+  "description": "Plasma astrophysicist at KU Leuven and BIRA-IASB working on particle-in-cell simulations of astrophysical plasmas, magnetic reconnection, and high-performance computing.",
+  "url": siteUrl,
+  "image": `${siteUrl}/images/fabio-bacchini.jpg`,
+  "worksFor": [
+    {
+      "@type": "CollegeOrUniversity",
+      "name": "KU Leuven",
+      "department": "Centre for mathematical Plasma Astrophysics (CmPA)",
+      "url": "https://wis.kuleuven.be/CmPA"
+    },
+    {
+      "@type": "ResearchOrganization",
+      "name": "Royal Belgian Institute for Space Aeronomy",
+      "alternateName": "BIRA-IASB",
+      "url": "https://www.aeronomie.be"
+    }
+  ],
+  "alumniOf": [
+    {
+      "@type": "CollegeOrUniversity",
+      "name": "KU Leuven",
+      "url": "https://www.kuleuven.be"
+    },
+    {
+      "@type": "CollegeOrUniversity",
+      "name": "University of Colorado Boulder",
+      "url": "https://www.colorado.edu"
+    }
+  ],
+  "email": ["fabio.bacchini@kuleuven.be", "fabio.bacchini@aeronomie.be"],
+  "sameAs": [
+    "https://scholar.google.com/citations?user=lVDg704AAAAJ",
+    "https://orcid.org/0000-0002-7526-8154",
+    "https://www.researchgate.net/profile/Fabio-Bacchini-2",
+    "https://www.linkedin.com/in/fabio-bacchini-484766163/"
+  ],
+  "knowsAbout": [
+    "plasma astrophysics",
+    "particle-in-cell simulations",
+    "high-performance computing",
+    "magnetohydrodynamics",
+    "magnetic reconnection",
+    "black hole accretion",
+    "solar wind turbulence",
+    "particle acceleration"
+  ]
+};
+
+const website = {
+  "@type": "WebSite",
+  "@id": websiteId,
+  "name": "Fabio Bacchini",
+  "url": `${siteUrl}/`,
+  "description": "Personal academic website of Fabio Bacchini, plasma astrophysicist at KU Leuven and BIRA-IASB.",
+  "inLanguage": "en",
+  "publisher": { "@id": personId }
+};
+
+const graph: Record<string, unknown>[] = [website, person];
+
+if (isHome) {
+  graph.push({
+    "@type": "ProfilePage",
+    "@id": `${siteUrl}/#profilepage`,
+    "url": `${siteUrl}/`,
+    "name": fullTitle,
+    "description": description,
+    "isPartOf": { "@id": websiteId },
+    "mainEntity": { "@id": personId }
+  });
+}
+
+const schema = { "@context": "https://schema.org", "@graph": graph };
 ---
 
 <!-- Primary Meta Tags -->
@@ -39,13 +125,18 @@ const fullTitle = title === 'Home'
 <link rel="preload" as="font" type="font/woff2" href="https://fonts.gstatic.com/s/inter/v18/UcCO3FwrK3iLTeHuS_nVMrMxCp50SjIw2boKoduKmMEVuLyfAZ9hiA.woff2" crossorigin />
 
 <!-- Open Graph -->
-<meta property="og:type" content="website" />
+<meta property="og:type" content={isHome ? 'profile' : 'website'} />
 <meta property="og:site_name" content="Fabio Bacchini" />
 <meta property="og:locale" content="en_US" />
 <meta property="og:url" content={canonicalUrl} />
 <meta property="og:title" content={fullTitle} />
 <meta property="og:description" content={description} />
 <meta property="og:image" content={`${siteUrl}${ogImage}`} />
+<meta property="og:image:width" content="1200" />
+<meta property="og:image:height" content="630" />
+<meta property="og:image:alt" content={fullTitle} />
+{isHome && <meta property="profile:first_name" content="Fabio" />}
+{isHome && <meta property="profile:last_name" content="Bacchini" />}
 
 <!-- Twitter -->
 <meta name="twitter:card" content="summary_large_image" />
@@ -53,39 +144,5 @@ const fullTitle = title === 'Home'
 <meta name="twitter:description" content={description} />
 <meta name="twitter:image" content={`${siteUrl}${ogImage}`} />
 
-<!-- Schema.org Person -->
-<script type="application/ld+json" set:html={JSON.stringify({
-  "@context": "https://schema.org",
-  "@type": "Person",
-  "name": "Fabio Bacchini",
-  "jobTitle": "Assistant Professor & Research Scientist",
-  "url": siteUrl,
-  "worksFor": [
-    {
-      "@type": "CollegeOrUniversity",
-      "name": "KU Leuven",
-      "department": "Centre for mathematical Plasma Astrophysics (CmPA)",
-      "url": "https://wis.kuleuven.be/CmPA"
-    },
-    {
-      "@type": "ResearchOrganization",
-      "name": "Royal Belgian Institute for Space Aeronomy",
-      "alternateName": "BIRA-IASB",
-      "url": "https://www.aeronomie.be"
-    }
-  ],
-  "email": ["fabio.bacchini@kuleuven.be", "fabio.bacchini@aeronomie.be"],
-  "sameAs": [
-    "https://scholar.google.com/citations?user=lVDg704AAAAJ",
-    "https://orcid.org/0000-0002-7526-8154",
-    "https://www.researchgate.net/profile/Fabio-Bacchini-2",
-    "https://www.linkedin.com/in/fabio-bacchini-484766163/"
-  ],
-  "knowsAbout": [
-    "plasma astrophysics",
-    "particle-in-cell simulations",
-    "high-performance computing",
-    "magnetohydrodynamics",
-    "magnetic reconnection"
-  ]
-})} />
+<!-- Schema.org: WebSite + Person (+ ProfilePage on home) -->
+<script type="application/ld+json" set:html={JSON.stringify(schema)} />

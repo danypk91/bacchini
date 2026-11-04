@@ -1,10 +1,20 @@
 ---
 import SectionHeading from '@components/global/SectionHeading.astro';
+import { getCollection } from 'astro:content';
+
+const publications = await getCollection('publications');
+const team = await getCollection('team');
+
+const publicationCount = publications.length;
+const teamCount = team.filter((m) => m.data.status === 'current').length;
+const prlCount = publications.filter((p) =>
+  (p.data.journal ?? '').includes('Physical Review Letters')
+).length;
 
 const stats = [
-  { value: '46', label: 'Publications', color: 'text-accent-cyan' },
-  { value: '16', label: 'Team Members', color: 'text-accent-violet' },
-  { value: '5', label: 'PRL Papers', color: 'text-accent-orange' },
+  { value: String(publicationCount), label: 'Publications', color: 'text-accent-cyan' },
+  { value: String(teamCount), label: 'Team Members', color: 'text-accent-violet' },
+  { value: String(prlCount), label: 'PRL Papers', color: 'text-accent-orange' },
 ];
 ---
 

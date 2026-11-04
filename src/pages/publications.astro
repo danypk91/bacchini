@@ -43,7 +43,7 @@ const pubsSchema = {
 ---
 
 <BaseLayout
-  title="Publications, Astrophysicist"
+  title="Publications in Plasma Astrophysics"
   description="Complete list of publications by Fabio Bacchini — peer-reviewed papers in astrophysics, plasma physics, and computational methods."
   ogImage="/images/og/publications.png"
 >
@@ -71,6 +71,13 @@ const pubsSchema = {
   <!-- Publication Filter + List -->
   <section id="publications-list" class="py-16 md:py-24">
     <div class="mx-auto max-w-[1200px] px-6">
+      <p class="mb-10 max-w-3xl text-text-secondary leading-relaxed">
+        Peer-reviewed publications in astrophysical plasma physics, particle-in-cell simulations,
+        magnetic reconnection, and black hole accretion. The papers span topics from
+        magnetorotational turbulence in pair plasmas and relativistic reconnection to solar wind
+        kinetic modeling and numerical methods for high-performance computing. Filter by year,
+        research topic, or first-author papers.
+      </p>
       <PublicationFilter client:load years={years} tags={tags} totalCount={totalCount} />
       <div class="mt-8">
         <PublicationList />
