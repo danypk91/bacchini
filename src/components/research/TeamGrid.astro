@@ -9,13 +9,12 @@ const currentMembers = allTeam
   .sort((a, b) => a.data.order - b.data.order);
 
 const postdocs = currentMembers.filter(m => m.data.role.toLowerCase().includes('postdoc'));
-const phdStudents = currentMembers.filter(m => m.data.role.toLowerCase().includes('phd') && !m.data.role.toLowerCase().includes('co-supervision'));
-const coSupervised = currentMembers.filter(m => m.data.role.toLowerCase().includes('co-supervision'));
+const phdStudents = currentMembers.filter(m => m.data.role.toLowerCase().includes('phd'));
 ---
 
 <section class="py-16 md:py-24">
   <div class="mx-auto max-w-[1200px] px-6">
-    <SectionHeading title="Research Group — CmPA, KU Leuven" subtitle="Current team members" />
+    <SectionHeading title="Research Group — CmPA, KU Leuven" subtitle="Current team members:" />
 
     <!-- Postdoctoral Fellows -->
     <div class="mb-12">
@@ -52,6 +51,7 @@ const coSupervised = currentMembers.filter(m => m.data.role.toLowerCase().includ
     </div>
 
     <!-- Co-supervised -->
+    <!-- REMOVED
     {coSupervised.length > 0 && (
       <div>
         <h3 class="mb-6 text-sm font-semibold uppercase tracking-wider text-text-muted">
@@ -69,5 +69,6 @@ const coSupervised = currentMembers.filter(m => m.data.role.toLowerCase().includ
         </div>
       </div>
     )}
+    REMOVED -->
   </div>
 </section>

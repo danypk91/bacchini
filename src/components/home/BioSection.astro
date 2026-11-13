@@ -11,11 +11,13 @@ const prlCount = publications.filter((p) =>
   (p.data.journal ?? '').includes('Physical Review Letters')
 ).length;
 
+/*
 const stats = [
   { value: String(publicationCount), label: 'Publications', color: 'text-accent-cyan' },
   { value: String(teamCount), label: 'Team Members', color: 'text-accent-violet' },
   { value: String(prlCount), label: 'PRL Papers', color: 'text-accent-orange' },
 ];
+*/
 ---
 
 <section id="about" class="py-16 md:py-24">
@@ -68,6 +70,7 @@ const stats = [
     </div>
 
     <!-- Stats row -->
+    <!-- REMOVED
     <div class="mt-12 grid grid-cols-3 gap-4">
       {stats.map((stat) => (
         <div class="rounded-xl border border-bg-elevated bg-bg-surface p-5 text-center">
@@ -78,5 +81,6 @@ const stats = [
         </div>
       ))}
     </div>
+    REMOVED --> 
   </div>
 </section>
