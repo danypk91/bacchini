@@ -1,5 +1,6 @@
 import { defineCollection, z } from 'astro:content';
 import { glob } from 'astro/loaders';
+import { PUBLICATION_STATUSES } from './utils/publicationCategories';
 
 const publications = defineCollection({
   loader: glob({ pattern: '**/*.yaml', base: './src/content/publications' }),
@@ -8,7 +9,7 @@ const publications = defineCollection({
     authors: z.string(),
     year: z.number(),
     journal: z.string().optional(),
-    status: z.enum(['submitted', 'accepted', 'published']).default('published'),
+    status: z.enum(PUBLICATION_STATUSES).default('published'),
     doi: z.string().nullable().optional(),
     arxiv: z.string().nullable().optional(),
     highlight: z.boolean().default(false),

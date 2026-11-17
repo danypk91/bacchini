@@ -1,15 +1,25 @@
 import { useState, useCallback } from 'react';
 
+interface Category {
+  id: string;
+  label: string;
+  statuses: string[];
+  count: number;
+}
+
 interface Props {
   years: number[];
   tags: string[];
+  categories?: Category[];
   totalCount: number;
 }
 
 // Internal prefix used to distinguish tag filters from year/special filters
 const TAG_PREFIX = 'tag:';
+// Prefix for status-based categories (e.g. Preprints)
+const CATEGORY_PREFIX = 'cat:';
 
-export default function PublicationFilter({ years, tags, totalCount }: Props) {
+export default function PublicationFilter({ years, tags, categories = [], totalCount }: Props) {
   const [activeFilter, setActiveFilter] = useState<string>('all');
   const [visibleCount, setVisibleCount] = useState(totalCount);
 
@@ -22,6 +32,9 @@ export default function PublicationFilter({ years, tags, totalCount }: Props) {
 
     const isTag = filter.startsWith(TAG_PREFIX);
     const tagValue = isTag ? filter.slice(TAG_PREFIX.length) : '';
+    const category = filter.startsWith(CATEGORY_PREFIX)
+      ? categories.find((c) => c.id === filter.slice(CATEGORY_PREFIX.length))
+      : undefined;
 
     cards.forEach((card) => {
       let show = false;
@@ -31,6 +44,8 @@ export default function PublicationFilter({ years, tags, totalCount }: Props) {
         show = card.dataset.position === 'first' || card.dataset.position === 'co-main';
       } else if (filter === 'highlighted') {
         show = card.dataset.highlight === 'true';
+      } else if (filter.startsWith(CATEGORY_PREFIX)) {
+        show = category?.statuses.includes(card.dataset.status ?? '') ?? false;
       } else if (isTag) {
         const cardTags = (card.dataset.tags ?? '').split('|').filter(Boolean);
         show = cardTags.includes(tagValue);
@@ -52,7 +67,7 @@ export default function PublicationFilter({ years, tags, totalCount }: Props) {
         // Year filter: only show matching divider
         divider.style.display = year === filter ? '' : 'none';
       } else {
-        // For first-author, highlighted or tag filters, check if any card in
+        // For category, first-author, highlighted or tag filters, check if any card in
         // that year is visible
         const yearCards = document.querySelectorAll<HTMLElement>(
           `[data-pub-card][data-year="${year}"]`
@@ -81,7 +96,7 @@ export default function PublicationFilter({ years, tags, totalCount }: Props) {
         : 0;
       window.scrollTo({ top: Math.max(top, 0), behavior: 'smooth' });
     }, 60);
-  }, []);
+  }, [categories]);
 
   // Pill button style helper
   const pillClass = (filter: string) => {
@@ -102,6 +117,18 @@ export default function PublicationFilter({ years, tags, totalCount }: Props) {
           All
           <span className="ml-1.5 text-xs opacity-60">{totalCount}</span>
         </button>
+
+        {/* Status categories (e.g. Preprints) */}
+        {categories.map((cat) => (
+          <button
+            key={cat.id}
+            onClick={() => applyFilter(CATEGORY_PREFIX + cat.id)}
+            className={pillClass(CATEGORY_PREFIX + cat.id)}
+          >
+            {cat.label}
+            <span className="ml-1.5 text-xs opacity-60">{cat.count}</span>
+          </button>
+        ))}
 
         {/* Separator */}
         <div className="mx-1 h-4 w-px bg-[#1a1a2e]" />

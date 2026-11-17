@@ -1,13 +1,14 @@
 ---
 import Badge from '@components/global/Badge.astro';
 import { highlightAuthor, doiUrl, arxivUrl } from '@utils/formatters';
+import type { PublicationStatus } from '@utils/publicationCategories';
 
 interface Props {
   title: string;
   authors: string;
   year: number;
   journal?: string;
-  status: 'submitted' | 'accepted' | 'published';
+  status: PublicationStatus;
   doi?: string | null;
   arxiv?: string | null;
   highlight?: boolean;
@@ -18,9 +19,10 @@ interface Props {
 
 const { title, authors, year, journal, status, doi, arxiv, highlight = false, highlightLabel, fabioPosition = 'contributing', tags = [] } = Astro.props;
 
-const statusStyles: Record<string, { variant: 'cyan' | 'violet' | 'orange' | 'default'; label: string }> = {
+const statusStyles: Record<PublicationStatus, { variant: 'cyan' | 'violet' | 'orange' | 'default'; label: string }> = {
   published: { variant: 'cyan', label: 'Published' },
   accepted: { variant: 'violet', label: 'Accepted' },
+  preprint: { variant: 'default', label: 'Preprint' },
   submitted: { variant: 'default', label: 'Submitted' },
 };
 ---

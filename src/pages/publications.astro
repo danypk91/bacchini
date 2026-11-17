@@ -4,6 +4,7 @@ import { getCollection } from 'astro:content';
 import PublicationList from '@components/publications/PublicationList.astro';
 import PublicationFilter from '@components/interactive/PublicationFilter';
 import PageHero from '@components/global/PageHero.astro';
+import { publicationCategories } from '@utils/publicationCategories';
 
 const allPubs = await getCollection('publications');
 const totalCount = allPubs.length;
@@ -11,6 +12,14 @@ const years = [...new Set(allPubs.map((p) => p.data.year))].sort((a, b) => b - a
 const tags = [...new Set(allPubs.flatMap((p) => p.data.tags))].sort((a, b) =>
   a.localeCompare(b)
 );
+
+// Status-based categories (e.g. Preprints), hidden when they have no papers
+const categories = publicationCategories
+  .map((cat) => ({
+    ...cat,
+    count: allPubs.filter((p) => cat.statuses.includes(p.data.status)).length,
+  }))
+  .filter((cat) => cat.count > 0);
 
 const firstAuthorPubs = allPubs
   .filter(p => p.data.fabio_position === 'first')
@@ -78,7 +87,7 @@ const pubsSchema = {
         kinetic modeling and numerical methods for high-performance computing. Filter by year,
         research topic, or first-author papers.
       </p>
-      <PublicationFilter client:load years={years} tags={tags} totalCount={totalCount} />
+      <PublicationFilter client:load years={years} tags={tags} categories={categories} totalCount={totalCount} />
       <div class="mt-8">
         <PublicationList />
       </div>
