@@ -3,15 +3,15 @@ import Button from '@components/global/Button.astro';
 import HeroAnimation from '@components/interactive/HeroAnimation';
 ---
 
-<section class="relative flex min-h-screen items-center overflow-hidden">
+<section class="relative flex min-h-screen items-center justify-center overflow-hidden">
   <!-- Background simulation image -->
-  <div class="absolute inset-0">
+  <div class="absolute inset-0 flex items-center">
     <img
       src="/images/hero-simulation.png"
       alt=""
       width="2460"
       height="1244"
-      class="h-full w-full object-cover"
+      class="hero-sim h-auto w-full"
       loading="eager"
       fetchpriority="high"
     />
@@ -78,3 +78,14 @@ import HeroAnimation from '@components/interactive/HeroAnimation';
     </a>
   </div>
 </section>
+
+<style>
+  /* The image always spans the full viewport width at its natural height,
+     vertically centred in the screen-height hero: never cropped on the sides,
+     only top/bottom on very wide screens. When the hero is taller than the
+     image, its top/bottom edges fade into the page background. */
+  .hero-sim {
+    -webkit-mask-image: linear-gradient(to bottom, transparent 0%, #000 8%, #000 92%, transparent 100%);
+    mask-image: linear-gradient(to bottom, transparent 0%, #000 8%, #000 92%, transparent 100%);
+  }
+</style>
